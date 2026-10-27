@@ -1,0 +1,10 @@
+/*@media (max-width: 768px) {
+ /* estilos para pantallas pequeñas */
+/*}
+
+/*@media only screen and (max-width: 1024px) {
+
+    nav ul {
+        display: none; /*se oculta panel de navegacion con enlaces normales*/
+    /*}
+}

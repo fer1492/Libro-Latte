@@ -1,0 +1,399 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #F7F0E5;
+    color: #432719;
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+
+header{
+    background-color: #70452F;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    position: relative; /* para que el menú se confine dentro del header */
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+nav ul li a {
+    font-family: 'Cormorant Garamond', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+#logo img {
+    width: 120px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+ul, ol {
+    list-style-type: none;
+}
+
+nav > ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #70452F;
+    gap: 20px; /* O usa justify-content si prefieres espacio entre ellos */
+}
+
+nav > ul a {
+    color: #F7F0E5;
+    text-decoration: none;
+    padding: 12px 16px;
+    display: block;
+}
+
+nav > ul a:hover {
+    color: #E4C28C;
+}
+
+main {
+    background-color: #F7F0E5;
+    color: #432719;
+    font-family: 'Roboto', sans-serif;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+main h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #2c1a14;
+}
+
+main p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #3d322c;
+}
+
+#carousel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #F7F0E5;
+    padding: 20px 0;
+    gap: 15px
+}
+
+#carousel-img {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: max-content;
+    max-width: 100%;
+    background-color: #F7F0E5;
+    border-radius: 8px;
+}
+
+.img{
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(67, 39, 25, 0.15);
+}
+
+#info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+    background-color: #F7F0E5;
+    color: #432719;
+    padding: 20px;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+#contacts {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    max-width: 500px;
+    height: auto;
+    text-align: left;
+}
+
+#map {
+    width: 100%;
+    max-width: 100px;
+    min-width: min(100%, 100px);
+    height: auto;
+    object-fit: cover;
+    margin-top: 20px;
+}
+
+footer {
+    background-color: #70452F;
+    color: #432719;
+    height: 100px;
+
+}
+
+header, main, footer {
+    width: 100%;
+}
+
+/* User Button */
+#user {
+    width: 25px;
+    height: 25px;
+}
+
+#button-user {
+    background-color: transparent;
+}
+
+#header-links {
+    width: auto;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-right: 20px;
+    gap: 15px;
+}
+
+.header-links {
+    color: #FFFFFF
+}
+
+a, button {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+h1 {
+    margin-left: 20px;
+    color: #FFFFFF;
+}
+
+#user-menu {
+    position: relative; /* <-- ESTO ES LO CLAVE: le dice al menú que se confine al espacio del botón */
+    display: inline-block;
+}
+
+#user-inactive {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: absolute;
+    top: 100%; /* Justo debajo del botón */
+    left: 50%;
+    transform: translateX(-50%);  /* Alineado al borde derecho del botón */
+    z-index: 100;
+    width: 140px; /* Un poco más ancho para que entre bien el texto de "Inicio de Sesión" */
+    height: 130px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#user-menu.open #user-inactive {
+    visibility: visible;
+    opacity: 1;
+}
+
+.line-user {
+    width: 40px;
+    border: 1px solid;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.overlay-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modal-login, #modal-register {
+    display: none;
+    flex-direction: column;
+    width: 250px;
+    position: fixed;
+    background-color: #FFFFFF;
+    padding: 20px;
+}
+
+.close-button {
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+#form-modal-login, #form-modal-register {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 5px;
+}
+
+#favourite-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.favourites-items {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 550px    ;
+    padding: 10px 20px 20px;
+    border: 1px solid black;
+    align-content: center;
+    justify-content: center;
+}
+
+.img-books {
+    display: block;
+    width: 150px;
+    height: auto;
+    margin: 0px auto;
+    background-color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/*A partir de aca, configuracion para moviles.
+/* Visibilidad en escritorio; las reglas de *media query* 
+en CSS prevalecen sobre esta configuración en anchos menores */
+/*.menu-burger-button,
+#open-menu-burger {
+    display: none;
+}
+
+.menu-burger-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 45px;
+    height: 24px;
+    margin-top: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+    background-color: #E4C28C;
+    border: none;
+}
+
+.burger-lines {
+    width: 45px;
+    height: 0;
+    border: 1.5px solid #FFFFFF;
+    transition: transform 0.5s;
+    will-change: tranform;
+}
+
+#header-links.open .burger-lines:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+} 
+
+#header-links.open .burger-lines:nth-child(2) {
+    opacity: 0;
+}
+
+#header-links.open .burger-lines:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+#open-menu-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: min(330px, 100vw);
+    height: 370px;
+    padding-top: 10px;
+    padding-bottom: 100px;
+    visibility: hidden;
+    z-index: 1;
+    background-color: #E4C28C;
+    transform: translateX(100%);
+    transition: transform 0.5s, visibility 0.5;
+}
+
+.burger-menu-links {
+    text-decoration: none;
+    cursor: pointer;
+    color:#FFFFFF;
+}
+
+#header-links.open #open-menu-burger {
+    transform: translateX(0);
+    visibility: visible;
+}
