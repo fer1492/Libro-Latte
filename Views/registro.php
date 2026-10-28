@@ -32,7 +32,7 @@
 require_once "conexion.php";
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: Front/index.html");
+    header("Location: Front/index.php");
     exit;
 }
 
@@ -91,7 +91,7 @@ try {
         ":password" => $hash
     ]);
 
-    header("Location: Front/index.html?registro=ok");
+    header("Location: Front/index.php?registro=ok");
     exit;
 
 } catch (PDOException $e) {

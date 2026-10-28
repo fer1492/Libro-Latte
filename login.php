@@ -4,7 +4,7 @@ session_start();
 require_once "conexion.php"; 
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: Front/index.html");
+    header("Location: Front/index.php");
     exit;
 }
 

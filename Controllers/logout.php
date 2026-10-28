@@ -4,6 +4,6 @@ session_start();
 $_SESSION = [];
 session_destroy();
 
-header("Location: Front/index.html");
+header("Location: Front/index.php");
 exit;
 ?>

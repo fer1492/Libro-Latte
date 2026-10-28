@@ -36,6 +36,10 @@ switch ($action) {
         $controllerLibro->buscarPorIsbn();
         break;
 
+    case 'catalogo':
+        $controllerLibro->catalogo();
+        break;
+
     case 'listar_libros':
         $controllerLibro->listar();
         break;

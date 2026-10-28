@@ -1,55 +1,91 @@
+
 <?php
 
-require_once '../Models/RepositorioLibro.php';
-require_once '../Models/Libro.php';
+require_once __DIR__ . '/../Models/RepositorioLibro.php';
+require_once __DIR__ . '/../Models/Libro.php';
 
-class ControllerLibro {
+class ControllerLibro
+{
     private RepositorioLibro $repo;
 
-  public function __construct($conexion) {
-    $this->repo = new RepositorioLibro($conexion);
-}
-
-    public function listar($mensaje = '') {
-        // Obtenemos los libros desde el repositorio de libros
-        $libros = $this->repo->buscarlibro(); 
-        require_once '../Views/inicio.php';
+    public function __construct($conexion)
+    {
+        $this->repo = new RepositorioLibro($conexion);
     }
 
+    // Mostrar la página de inicio con los libros
+    public function listar($mensaje = '')
+    {
+        $libros = $this->repo->buscarlibro();
 
-    public function buscarPorIsbn() {
+        require __DIR__ . '/../Views/inicio.php';
+    }
+
+    // Buscar un libro por su ISBN
+    public function buscarPorIsbn()
+    {
         $isbn = trim($_GET['isbn'] ?? '');
+
         $resultado = null;
+        $mensajeBusqueda = '';
 
-        if (!empty($isbn)) {
+        if ($isbn === '') {
+            $mensajeBusqueda = 'Ingresá un ISBN para realizar la búsqueda.';
+        } else {
             $resultado = $this->repo->buscarStockPorIsbn($isbn);
+
+            if (!$resultado) {
+                $mensajeBusqueda = 'No se encontró ningún libro con ese ISBN.';
+            }
         }
 
+        require __DIR__ . '/../Views/inicio.php';
     }
 
-    public function crear() {
-         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        try {
-            // 1. Leemos los 5 datos del formulario
-            $isbn   = $_POST['isbn'] ?? '';
-            $titulo = $_POST['titulo'] ?? '';
-            $autor  = $_POST['autor'] ?? '';
-            $precio = $_POST['precio'] ?? 0;
-            $stock  = $_POST['stock'] ?? 0;
+    // Registrar un libro
+    public function crear()
+    {
+        $mensaje = '';
 
-            // 2. Pasamos los 5 argumentos exactos que requiere la clase Libro
-            $libro = new Libro($isbn, $titulo, $autor, $precio, $stock);
-            
-            // 3. Guardamos en BD mediante el repositorio
-            $this->repo->agregarLibro($libro);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $isbn        = trim($_POST['isbn'] ?? '');
+                $titulo      = trim($_POST['titulo'] ?? '');
+                $autor       = trim($_POST['autor'] ?? '');
+                $precio      = $_POST['precio'] ?? 0;
+                $stock       = $_POST['stock'] ?? 0;
+                $descripcion = trim($_POST['descripcion'] ?? '');
+                $imagen      = trim($_POST['imagen'] ?? '');
 
-            $this->listar();
-            return;
-        } catch (Exception $e) {
-            $mensaje = 'Error: ' . $e->getMessage();
+                $libro = new Libro(
+                    $isbn,
+                    $titulo,
+                    $autor,
+                    $precio,
+                    $stock,
+                    $descripcion,
+                    $imagen
+                );
+
+                $this->repo->agregarLibro($libro);
+
+                $mensaje = 'Libro registrado correctamente.';
+            } catch (Exception $e) {
+                $mensaje = 'Error al registrar el libro: '
+                         . $e->getMessage();
+            }
         }
+
+        $libros = $this->repo->buscarlibro();
+
+        require __DIR__ . '/../Views/inicio.php';
     }
 
-    require_once '../Views/inicio.php';
-}
+    // Mostrar los libros disponibles en el catálogo
+    public function catalogo()
+    {
+        $libros = $this->repo->buscarDisponible();
+
+        require __DIR__ . '/../Views/catalogo.php';
+    }
 }

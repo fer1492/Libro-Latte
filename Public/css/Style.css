@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');
+
 body {
     background-color: #F7F0E5;
     color: #432719;
@@ -328,4 +330,139 @@ h1 {
 
 .hidden {
     display: none;
+}
+
+/*Apartado del Catalogo */
+.catalogo {
+    width: min(1200px, 92%);
+    margin: 40px auto;
+}
+
+.catalogo h2 {
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #2c1a14;
+    text-align: center;
+    
+    border: 2px solid #70452F;
+    padding: 18px 30px;
+    border-radius: 8px;
+
+    display: inline-block;
+    margin: 0 auto 30px;
+    background: #F7F0E5;
+}
+
+/*Distribucion de libros en catalogo */
+.libros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+/* Presentacion de libros en forma de tarjetas */
+.libro {
+    padding: 18px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 3px 12px #00000018;
+    text-align: center;
+}
+
+.libro h3 {
+    margin: 10px 0; 
+}
+
+.libro p {
+    margin: 8px 0;
+}
+
+article.libro img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Evita espacios en blanco indeseados debajo de la imagen */
+}
+
+/* Libro Disponible */
+.disponible {
+    color: #267344;
+    font-weight: bold;
+}
+
+.descripcion {
+    line-height: 1.5;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.search-form input {
+    padding: 12px;
+    border: 1px solid #70452F;
+    border-radius: 6px;
+    font-size: 16px;
+    max-width: 100%;
+}
+
+.search-form button {
+    padding: 12px 20px;
+    background-color: #70452F;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #432719;
+}
+
+.resultado-libro {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #FFFFFF;
+    color: #432719;
+    border: 2px solid #70452F;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000018;
+}
+
+.resultado-libro h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    margin-bottom: 15px;
+}
+
+.resultado-libro p {
+    margin: 8px 0;
+}
+
+.mensaje-busqueda {
+    color: #70452F;
+    font-weight: bold;
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .libros-grid {
+        -ms-grid-column: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .libros-grid {
+        grid-template-columns: 1fr;
+    }
 }

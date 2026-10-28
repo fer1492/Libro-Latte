@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION["cedula"])) {
-    header("Location: Front/index.html");
+    header("Location: Front/index.php");
     exit;
 }
 ?>

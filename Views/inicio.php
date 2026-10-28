@@ -25,7 +25,7 @@
         <div id="header-links">
             <nav>
                 <ul>
-                    <li><a class="header-links" href="#about">Sobre Nosotros</a></li>
+                    <li><a class="header-links" href="/LibreriaPaginaClon/Libro-Latte/Public/Index.php?action=catalogo">Catalogo Disponible</a></li>
                     <li><a class="header-links" href="#favourites">Favoritos y Recomendaciones</a></li>
                     <li><a class="header-links" href="#Search">Busqueda</a></li>
                     <li><a class="header-links" href="#our-contacts">Ponte en contacto con nosotros</a></li>
@@ -152,12 +152,52 @@
         <section id="Search">
             <h2>Busqueda por titulo, autor, codigo ISBN</h2> 
             <hr class="line">
-            <div class="search-form">
-                <input type="search" id="search-input" placeholder="Busqueda">
-                <button type="button" id="search-button">Buscar</button>
-            </div>
 
-            <div id="search-result"></div>
+            <form class="search-form" action="Index.php" method="GET">
+                <input type="hidden" name="action" value="buscar_isbn">
+
+                <input
+                    type="sear"
+                    id="search-input"
+                    name="isbn"
+                    placeholder="Ingresa el codigo ISBN"
+                    value="<?= htmlspecialchars($_GET['isbn'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                    required
+                > 
+
+            <button type="submit" id="search-button">Buscar</button>
+            </form>
+
+            <div id="search-result">
+                <?php if (!empty($mensajeBusqueda)): ?>
+                    <p class="mensaje-busqueda">
+                        <?= htmlspecialchars($mensajeBusqueda, ENT_QUOTES, 'UTF-8') ?>
+                    </p>
+                <?php endif;?>
+
+                <?php if (!empty($resultado)): ?>
+                    <article class="resultado-libro">
+                        <h3>
+                            <?= htmlspecialchars($resultado['titulo'], ENT_QUOTES, 'UTF-8') ?>
+                        </h3>
+
+                        <p>
+                            <strong>Autor:</strong>
+                            <?= htmlspecialchars($resultado['autor'], ENT_QUOTES, 'UTF-8') ?>
+                        </p>
+
+                        <p>
+                            <strong>Precio:</strong>
+                            $<?= number_format((float)$resultado['precio'], 2, ',', '.') ?>
+                        </p>
+
+                        <p>
+                            <strong>Stock Disponible:</strong>
+                            <?= (int)$resultado['stock'] ?>
+                        </p>
+                    </article>
+                <?php endif; ?>
+            </div>
         </section>
 
         <section id="our-contacts">
@@ -186,12 +226,13 @@
     <footer>LIBRO&LATTE</footer> 
 
     <!-- Contenedor general para modales flotantes -->
-    <div id="overlay" class="overlay">
-        <?php require_once 'login.php'; ?>
-        <?php require_once 'registro.php'; ?>
-    </div>
+   <div id="overlay" class="overlay">
+    <?php require_once __DIR__ . '/../Views/login.php'; ?>
+    <?php require_once __DIR__ . '/../Views/registro.php'; ?>
+</div>
 
     <!-- Script JS desde la carpeta Public -->
-    <script src="../Public/JS/index.js"></script>
+    <script src="../js/index.js" defer></script>
+
 </body>
 </html>

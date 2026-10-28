@@ -1,93 +1,111 @@
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("JS cargado correctamente."); // Para verificar en F12 -> Console
 
-    // 1. Abrir menu de usuario
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("JS cargado correctamente.");
+
+    // 1. Menú de usuario
     const btnUser = document.getElementById("button-user");
     const userMenu = document.getElementById("user-menu");
-    
+
     if (btnUser && userMenu) {
-        btnUser.addEventListener("click", function(e) {
-            e.stopPropagation(); // Evita interferencias de otros clics
+        btnUser.addEventListener("click", function (e) {
+            e.stopPropagation();
             userMenu.classList.toggle("open");
-            console.log("Clic en el botón de usuario detectado.");
         });
     } else {
-        console.warn("No se encontró #button-user o #user-menu en el DOM.");
+        console.warn("Falta #button-user o #user-menu.");
     }
 
-    // 2. Abrir overlay con menú login
+    // 2. Elementos de los modales
+    const overlay = document.getElementById("overlay");
+    const modalLogin = document.getElementById("modal-login");
+    const modalRegister = document.getElementById("modal-register");
+
+    // Abrir inicio de sesión
     const linkLogin = document.getElementById("user-menu-link-login");
-    if (linkLogin) {
-        linkLogin.addEventListener("click", function() {
-            document.getElementById("overlay").classList.add("overlay-open");
-            document.getElementById("modal-register").style.display = "none";
-            document.getElementById("modal-login").style.display = "flex";
+
+    if (linkLogin && overlay && modalLogin && modalRegister) {
+        linkLogin.addEventListener("click", function (e) {
+            e.preventDefault();
+            overlay.classList.add("overlay-open");
+            modalRegister.style.display = "none";
+            modalLogin.style.display = "flex";
+
             if (userMenu) userMenu.classList.remove("open");
         });
     }
 
-    // 3. Abrir overlay con menú register
+    // Abrir registro
     const linkRegister = document.getElementById("user-menu-link-register");
-    if (linkRegister) {
-        linkRegister.addEventListener("click", function() {
-            document.getElementById("overlay").classList.add("overlay-open");
-            document.getElementById("modal-login").style.display = "none";
-            document.getElementById("modal-register").style.display = "flex";
+
+    if (linkRegister && overlay && modalLogin && modalRegister) {
+        linkRegister.addEventListener("click", function (e) {
+            e.preventDefault();
+            overlay.classList.add("overlay-open");
+            modalLogin.style.display = "none";
+            modalRegister.style.display = "flex";
+
             if (userMenu) userMenu.classList.remove("open");
         });
     }
 
-    // 4. Cerrar con cruz (equis)
-    document.querySelectorAll(".close-button").forEach(button => {
-        button.addEventListener("click", function() {
-            document.getElementById("overlay").classList.remove("overlay-open");
+    // 3. Cerrar modales
+    document.querySelectorAll(".close-button").forEach(function (button) {
+        button.addEventListener("click", function () {
+            if (overlay) overlay.classList.remove("overlay-open");
 
-            document.querySelectorAll(".modal").forEach(modal => {
+            document.querySelectorAll(".modal").forEach(function (modal) {
                 modal.style.display = "none";
             });
 
-            if (userMenu) {
-                userMenu.classList.remove("open");
-            }
+            if (userMenu) userMenu.classList.remove("open");
         });
     });
 
-    // 5. Favoritos radio-button catalogo por categoria
-    const radios = document.querySelectorAll('input[type=radio][name="categoria"]');
-    radios.forEach(radio => {
-        radio.addEventListener("change", () => {
+    // 4. Filtrar libros por categoría
+    const radios = document.querySelectorAll(
+        'input[type="radio"][name="categoria"]'
+    );
+
+    radios.forEach(function (radio) {
+        radio.addEventListener("change", function () {
             const allBooks = document.querySelectorAll("div.favourites-items");
-            allBooks.forEach(book => book.classList.add("hidden"));
-            
-            const seasonbooks = document.querySelectorAll(`div.favourites-items.${radio.value}`);
-            seasonbooks.forEach(book => book.classList.remove("hidden"));
+
+            allBooks.forEach(function (book) {
+                book.classList.add("hidden");
+            });
+
+            const selectedBooks = document.querySelectorAll(
+                `div.favourites-items.${CSS.escape(radio.value)}`
+            );
+
+            selectedBooks.forEach(function (book) {
+                book.classList.remove("hidden");
+            });
         });
     });
 
-    // 6. Inicializar carrusel de forma segura una vez cargado el DOM
+    // 5. Inicializar carrusel
     showSlides(slideIndex);
 });
 
-// --- Carousel Globals ---
+// Carrusel   
 let slideIndex = 1;
 
 function plusSlides(n) {
-    slideIndex = slideIndex + n;
-    showSlides(slideIndex);
+    showSlides(slideIndex += n);
 }
 
 function showSlides(n) {
-    let slides = document.getElementsByClassName("img");
-    if (slides.length > 0) {
-        if (n > slides.length) {
-            slideIndex = 1;
-        }
-        if (n < 1) {
-            slideIndex = slides.length;
-        }
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        slides[slideIndex - 1].style.display = "block";
+    const slides = document.getElementsByClassName("img");
+
+    if (slides.length === 0) return;
+
+    if (n > slides.length) slideIndex = 1;
+    if (n < 1) slideIndex = slides.length;
+
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
     }
+
+    slides[slideIndex - 1].style.display = "block";
 }
