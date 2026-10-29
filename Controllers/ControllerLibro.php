@@ -16,7 +16,11 @@ class ControllerLibro
     //Se inicia la sesion en caso de que la sesion no este inciada
     private function iniciarSesion() {
         if (session_status() === PHP_SESSION_NONE) {
+
             session_start();
+
+
+
         }
     }
 
