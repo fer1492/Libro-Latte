@@ -237,6 +237,6 @@
 
     <!-- Script JS desde la carpeta Public -->
      
-  <script src="../js/index.js" defer></script>
+  <script src="../Public/JS/index.js" defer></script>
 </body>
 </html>

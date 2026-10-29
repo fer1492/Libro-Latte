@@ -28,10 +28,19 @@
                     <li><a class="header-links" href="/LibreriaPaginaClon/Libro-Latte/Public/Index.php?action=catalogo">Catalogo Disponible</a></li>
                     <li><a class="header-links" href="#favourites">Favoritos y Recomendaciones</a></li>
                     <li><a class="header-links" href="#Search">Busqueda</a></li>
-                    <li><a class="header-links" href="#our-contacts">Ponte en contacto con nosotros</a></li>
-                </ul>
-            </nav>
-        </div>        
+                    <?php if (
+                                isset($_SESSION['usuario_rol']) &&
+                                strtolower(trim((string) $_SESSION['usuario_rol'])) === 'bibliotecario'
+                                ): ?>
+                    <li>
+                    <a class="header-links" href="/LibreriaPaginaClon/Libro-Latte/Public/Index.php?action=formulario_libro">
+                        Agregar libro
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+</div> 
 
         <!-- Menú de usuario ubicado de forma independiente y libre en el header -->
         <div id="user-menu" class="user-menu">
@@ -232,7 +241,7 @@
 </div>
 
     <!-- Script JS desde la carpeta Public -->
-    <script src="../js/index.js" defer></script>
+    <script src="../Public/JS/index.js" defer></script>
 
 </body>
 </html>

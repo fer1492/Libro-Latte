@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Public/index.php
 
 // 1. Cargar la conexión a la base de datos
@@ -49,5 +52,14 @@ switch ($action) {
     default:
         require_once '../Views/inicio.php';
         break;
+
+    // ACCIONES AGREGAR LIBRO //
+    case 'formulario_libro':
+    $controllerLibro->mostrarFormulario();
+    break;
+
+    case 'agregar_libro':
+    $controllerLibro->crear();
+    break;
 }
 ?>

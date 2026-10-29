@@ -1,3 +1,4 @@
+
 <?php
 
 class Libro {
@@ -9,18 +10,26 @@ class Libro {
     private $descripcion;
     private $imagen;
 
-    public function __construct($isbn, $titulo, $autor, $precio, $stock) {
+    public function __construct(
+        $isbn,
+        $titulo,
+        $autor,
+        $precio,
+        $stock,
+        $descripcion = '',
+        $imagen = ''
+    ) {
         $this->isbn = $isbn;
         $this->titulo = $titulo;
         $this->autor = $autor;
         $this->precio = $precio;
         $this->stock = $stock;
-        $this->descripcion = '';
-        $this->imagen = '';
+        $this->descripcion = $descripcion;
+        $this->imagen = $imagen;
     }
 
     // Getters
-   public function getIsbn() {
+    public function getIsbn() {
         return $this->isbn;
     }
 

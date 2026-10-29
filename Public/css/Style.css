@@ -450,6 +450,77 @@ article.libro img {
     font-weight: bold;
 }
 
+/* Personalizacion formulario agregar libro */
+
+/* ===== FORMULARIO AGREGAR LIBRO ===== */
+
+.formulario-libro {
+    width: min(650px, 92%);
+    margin: 40px auto;
+    padding: 28px;
+    background: #fff;
+    color: #432719;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000018;
+    box-sizing: border-box;
+}
+
+.formulario-libro h1 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.formulario-libro label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 6px;
+}
+
+.formulario-libro input,
+.formulario-libro textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font: inherit;
+}
+
+.formulario-libro textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.formulario-libro button {
+    margin-top: 22px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #70452F;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.formulario-libro button:hover {
+    background: #432719;
+}
+
+.mensaje-libro {
+    padding: 12px;
+    margin-bottom: 16px;
+    background: #F7F0E5;
+    border-radius: 6px;
+}
+
+.volver {
+    display: inline-block;
+    margin-top: 18px;
+    color: #70452F;
+}
+
+
 
 
 
