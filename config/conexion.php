@@ -5,7 +5,7 @@ $host = "localhost";
 $puerto = 3306;
 $dbname = "libreria";
 $user = "root";
-$pass = "5095627xd";
+$pass = "";
 
 try {
     $conexion = new PDO(
@@ -27,5 +27,5 @@ try {
 } catch (PDOException $e) {
     error_log($e->getMessage());
     http_response_code(500);
-    exit("Error: No se pudo conectar con la base de datos");
+    exit("Error: No se pudo conectar con la base de datos.<br><strong>Detalle:</strong> " . $e->getMessage());
 }

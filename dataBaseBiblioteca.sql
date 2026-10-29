@@ -114,6 +114,8 @@ CREATE TABLE `ventas` (
   `cantidad` int(11) NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `estado` enum('reserva','vendido','cancelado') NOT NULL DEFAULT 'reserva',
+  `atendido_por` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_venta_usuario` (`usuario_cedula`),
   KEY `fk_venta_libro` (`libro_isbn`),

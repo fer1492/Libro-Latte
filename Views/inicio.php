@@ -25,7 +25,7 @@
         <div id="header-links">
             <nav>
                 <ul>
-                    <li><a class="header-links" href="/LibreriaPaginaClon/Libro-Latte/Public/Index.php?action=catalogo">Catalogo Disponible</a></li>
+                    <li><a class="header-links" href="Index.php?action=catalogo">Catálogo Disponible</a></li>
                     <li><a class="header-links" href="#favourites">Favoritos y Recomendaciones</a></li>
                     <li><a class="header-links" href="#Search">Busqueda</a></li>
                     <?php if (
@@ -33,10 +33,11 @@
                                 strtolower(trim((string) $_SESSION['usuario_rol'])) === 'bibliotecario'
                                 ): ?>
                     <li>
-                    <a class="header-links" href="/LibreriaPaginaClon/Libro-Latte/Public/Index.php?action=formulario_libro">
+                    <a class="header-links" href="Index.php?action=formulario_libro">
                         Agregar libro
                     </a>
                 </li>
+                    <li><a class="header-links" href="Index.php?action=panel_reservas">Panel Reservas</a></li>
             <?php endif; ?>
         </ul>
     </nav>
@@ -205,7 +206,8 @@
                             <?= (int)$resultado['stock'] ?>
                         </p>
                     </article>
-                <?php endif; ?>
+
+            <?php endif; ?>
             </div>
         </section>
 
