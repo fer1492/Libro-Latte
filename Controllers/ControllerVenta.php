@@ -35,6 +35,12 @@ class ControllerVenta {
             exit;
         }
 
+        // Regla de negocio: Administradores y bibliotecarios no pueden realizar reservas
+        if ($this->esBibliotecario()) {
+            header('Location: Index.php?action=catalogo&error=admin_no_puede_reservar');
+            exit;
+        }
+
         $isbn = trim($_POST['isbn'] ?? $_GET['isbn'] ?? '');
         $cantidad = (int)($_POST['cantidad'] ?? 1);
         if ($cantidad < 1) $cantidad = 1;

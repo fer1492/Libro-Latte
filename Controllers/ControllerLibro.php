@@ -29,7 +29,7 @@ class ControllerLibro
         $this->iniciarSesion();
 
         return isset($_SESSION['usuario_rol']) &&
-            strtolower(trim((string) $_SESSION['usuario_rol'])) === 'bibliotecario';
+            in_array(strtolower(trim((string) $_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root']);
 
     }
 

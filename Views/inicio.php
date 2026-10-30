@@ -45,20 +45,49 @@
 
         <!-- Menú de usuario ubicado de forma independiente y libre en el header -->
         <div id="user-menu" class="user-menu">
+            <?php if (isset($_SESSION['usuario_cedula'])): ?>
+                <span class="saludo-usuario-header">
+                    ¡Hola, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>!
+                </span>
+            <?php endif; ?>
             <button id="button-user" type="button">
                 <img id="user" src="../Public/Assets/icons/icono usuario.png" alt="user">
             </button>
 
             <div id="user-inactive">
+                <?php if (isset($_SESSION['usuario_cedula'])): ?>
+                    <p style="font-size: 0.95rem; font-weight: bold; color: #4a2e18; margin: 0; text-align: center;">
+                        ¡Hola, <?= htmlspecialchars(trim(($_SESSION['usuario_nombre'] ?? '') . ' ' . ($_SESSION['usuario_apellido'] ?? '')), ENT_QUOTES, 'UTF-8') ?>!
+                    </p>
+                    <span class="badge-rol">(<?= htmlspecialchars($_SESSION['usuario_rol'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>)</span>
+                    <hr class="line-user">
+                    <?php if (isset($_SESSION['usuario_rol']) && in_array(strtolower(trim((string)$_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root'])): ?>
+                        <a href="Index.php?action=panel_reservas" class="user-menu-link-btn">Panel Reservas</a>
+                        <a href="Index.php?action=formulario_libro" class="user-menu-link-btn">Agregar Libro</a>
+                    <?php else: ?>
+                        <a href="Index.php?action=mis_reservas" class="user-menu-link-btn">Mis Reservas</a>
+                    <?php endif; ?>
+                    <hr class="line-user">
+                    <a href="Index.php?action=logout" class="user-menu-link-btn btn-logout">Cerrar Sesión</a>
+                <?php else: ?>
                 <p>Profile</p>
                 <hr class="line-user">
                 <button class="user-menu-link" id="user-menu-link-login" type="button">Inicio de Sesion</button>
                 <button class="user-menu-link" id="user-menu-link-register" type="button">Registro</button>
+                <?php endif; ?>
             </div>
         </div> 
     </header>
 
     <main>
+        <?php if (isset($_SESSION['usuario_cedula'])): ?>
+            <div class="banner-bienvenida">
+                <span>
+                    👋 ¡Hola, <strong><?= htmlspecialchars(trim(($_SESSION['usuario_nombre'] ?? '') . ' ' . ($_SESSION['usuario_apellido'] ?? '')), ENT_QUOTES, 'UTF-8') ?></strong>! Bienvenido a tu cuenta en Libro&Latte.
+                </span>
+
+            </div>
+        <?php endif; ?>
         <section id="about">
             <h2>Sobre Nosotros</h2>
             <p>Te damos la bienvenida a Libro&Latte, una libreria joven que fue creada para brindarte la mejor experiencia entre vos, un libro y café.</p> 

@@ -80,7 +80,8 @@ class ControllerUsuario {
 
             // Guardamos los datos clave en la sesión
             $_SESSION['usuario_cedula'] = $usuarioBD['cedula'];
-            $_SESSION['usuario_nombre'] = $usuarioBD['nombre'];
+            $_SESSION['usuario_nombre']   = $usuarioBD['nombre'];
+            $_SESSION['usuario_apellido'] = $usuarioBD['apellido'] ?? '';
             $_SESSION['usuario_rol']    = $usuarioBD['rol'];
 
             header("Location: index.php?login=ok");

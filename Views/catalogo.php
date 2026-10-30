@@ -60,6 +60,21 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
         .btn-reservar-card:hover {
             background-color: #4a2e18;
         }
+        .btn-admin-badge {
+            background-color: #8b7355;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            width: 100%;
+            cursor: default;
+            opacity: 0.85;
+            text-align: center;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -72,12 +87,18 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
 
         <nav class="catalogo-header-nav">
             <a href="Index.php?action=inicio">Inicio</a>
-            <?php if ($estaLogueado): ?>
+            <?php if ($estaLogueado && !$esBibliotecario): ?>
                 <a href="Index.php?action=mis_reservas">Mis Reservas</a>
             <?php endif; ?>
             <?php if ($esBibliotecario): ?>
                 <a href="Index.php?action=panel_reservas">Panel Reservas</a>
                 <a href="Index.php?action=formulario_libro">Agregar Libro</a>
+            <?php endif; ?>
+            <?php if ($estaLogueado): ?>
+                <span style="color: #ffd8a8; font-family: 'Cinzel', serif; font-size: 0.95rem; margin-left: 10px;">
+                    ¡Hola, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>!
+                </span>
+                <a href="Index.php?action=logout" style="background: #dc3545; color: white;">Cerrar Sesión</a>
             <?php endif; ?>
         </nav>
     </header>
@@ -93,13 +114,15 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
             <div class="alerta-catalogo alerta-err">
                 <?php if ($_GET['error'] === 'sin_stock'): ?>
                     No hay stock disponible para reservar este libro.
+                <?php elseif ($_GET['error'] === 'admin_no_puede_reservar'): ?>
+                    Los administradores y bibliotecarios no pueden realizar reservas de libros.
                 <?php else: ?>
                     Ocurrió un inconveniente al procesar tu solicitud.
                 <?php endif; ?>
             </div>
         <?php elseif (isset($_GET['action']) && $_GET['action'] === 'login_requerido'): ?>
             <div class="alerta-catalogo alerta-err">
-                Debes iniciar sesión con tu cuenta para poder reservar un libro.
+                Debes iniciar sesión como cliente para poder reservar un libro.
             </div>
         <?php endif; ?>
 
@@ -127,7 +150,11 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                             <p class="descripcion"><?= htmlspecialchars($libro['descripcion'], ENT_QUOTES, 'UTF-8') ?></p>
                         <?php endif; ?>
 
-                        <?php if ((int)$libro['stock'] > 0): ?>
+                        <?php if ($esBibliotecario): ?>
+                            <!-- Para el administrador o bibliotecario no se muestra la opción de reservar -->
+                            <span class="btn-admin-badge">Modo Administrador</span>
+                        <?php elseif ((int)$libro['stock'] > 0): ?>
+                            <!-- Para los clientes normales -->
                             <form method="POST" action="Index.php?action=reservar">
                                 <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn'], ENT_QUOTES, 'UTF-8') ?>">
                                 <input type="hidden" name="cantidad" value="1">

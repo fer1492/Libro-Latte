@@ -179,6 +179,9 @@ header, main, footer {
 
 /* User Button & Menu - Posicionado de forma independiente en la esquina */
 #user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     position: absolute;
     top: 50%;
     right: 20px;
@@ -235,7 +238,10 @@ h1 {
     top: 100%;
     right: 0;
     z-index: 600;
-    width: 140px;
+    min-width: 180px;
+    width: auto;
+    max-width: 240px;
+    padding: 12px 10px;
     background-color: #FFFFFF;
     box-shadow: 0 4px 8px rgba(67, 39, 25, 0.2);
     border-radius: 4px;
@@ -537,3 +543,57 @@ article.libro img {
         grid-template-columns: 1fr;
     }
 }
+
+/* --- ESTILOS DE USUARIO, BIENVENIDA Y LOGOUT --- */
+.saludo-usuario-header {
+    color: #ffd8a8;
+    font-size: 0.95rem;
+    font-family: 'Cinzel', serif;
+    white-space: nowrap;
+}
+.banner-bienvenida {
+    background: #fff8f0;
+    border-left: 5px solid #70452F;
+    color: #4a2e18;
+    padding: 14px 22px;
+    margin: 15px auto 20px auto;
+    max-width: 1100px;
+    font-size: 1.15rem;
+    font-family: 'Cormorant Garamond', serif;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.user-menu-link-btn {
+    text-decoration: none;
+    color: #4a2e18;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    width: 90%;
+    text-align: center;
+    border-radius: 4px;
+    margin: 3px 0;
+    transition: background 0.2s;
+    font-family: 'Cinzel', serif;
+    display: block;
+    box-sizing: border-box;
+}
+.user-menu-link-btn:hover {
+    background: #f4ece4;
+}
+.user-menu-link-btn.btn-logout {
+    background-color: #dc3545;
+    color: #ffffff;
+    font-weight: 600;
+    margin-top: 6px;
+}
+.user-menu-link-btn.btn-logout:hover {
+    background-color: #c82333;
+}
+.badge-rol {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: capitalize;
+    }

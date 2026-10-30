@@ -107,8 +107,16 @@ if (session_status() === PHP_SESSION_NONE) {
                             <td><?= (int)$item['cantidad'] ?></td>
                             <td>$<?= number_format((float)$item['total'], 2, ',', '.') ?></td>
                             <td>
+                                <?php
+                                $textoEstado = match($item['estado']) {
+                                    'reserva'   => 'Pendiente de retiro',
+                                    'vendido'   => 'Comprado / Finalizado',
+                                    'cancelado' => 'Cancelado',
+                                    default     => ucfirst($item['estado'])
+                                };
+                                ?>
                                 <span class="estado-badge estado-<?= htmlspecialchars($item['estado'], ENT_QUOTES, 'UTF-8') ?>">
-                                    <?= htmlspecialchars($item['estado'], ENT_QUOTES, 'UTF-8') ?>
+                                    <?= htmlspecialchars($textoEstado, ENT_QUOTES, 'UTF-8') ?>
                                 </span>
                             </td>
                             <td>

@@ -1,11 +1,11 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_start;
+    session_start();
 }
 
 if (
     !isset($_SESSION['usuario_rol']) ||
-    strtolower(trim((string) $_SESSION['usuario_rol'])) !== 'bibliotecario'
+    !in_array(strtolower(trim((string) $_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root'])
 ) {
     http_response_code(403);
     exit('No tenes permiso para acceder a esta seccion.');

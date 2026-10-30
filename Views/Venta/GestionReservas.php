@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Reservas y Ventas - Libro&Latte</title>
+    <title>Panel de Reservas - Libro&Latte</title>
     <link rel="stylesheet" href="css/Style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -102,6 +102,15 @@ if (session_status() === PHP_SESSION_NONE) {
             background: #fff3cd;
             color: #856404;
         }
+        .badge-finalizado {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #d4edda;
+            color: #155724;
+        }
         .nav-links {
             margin-bottom: 20px;
             display: flex;
@@ -135,14 +144,14 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
 
         <h2 class="panel-title">Panel de Control: Reservas Pendientes</h2>
-        <p class="panel-subtitle">Solo el bibliotecario o administrador puede concretar la venta y descontar stock.</p>
+        <p class="panel-subtitle">El personal bibliotecario o administrador puede confirmar la entrega y cobro para finalizar la reserva y descontar stock.</p>
 
         <?php if (isset($_GET['venta']) && $_GET['venta'] === 'ok'): ?>
-            <div class="alert alert-success">¡Venta confirmada con éxito! El stock ha sido actualizado.</div>
+            <div class="alert alert-success">¡Reserva finalizada y entregada con éxito! El stock ha sido actualizado.</div>
         <?php elseif (isset($_GET['cancelada']) && $_GET['cancelada'] === 'ok'): ?>
             <div class="alert alert-success">La reserva ha sido cancelada correctamente.</div>
         <?php elseif (isset($_GET['error']) && $_GET['error'] === 'sin_stock'): ?>
-            <div class="alert alert-error">Error: No hay suficiente stock para concretar la venta de este libro.</div>
+            <div class="alert alert-error">Error: No hay suficiente stock para concretar la entrega de este libro.</div>
         <?php endif; ?>
 
         <?php if (empty($reservas)): ?>
@@ -181,9 +190,9 @@ if (session_status() === PHP_SESSION_NONE) {
                             <td>$<?= number_format((float)$reserva['total'], 2, ',', '.') ?></td>
                             <td>
                                 <div style="display: flex; gap: 6px;">
-                                    <form method="POST" action="Index.php?action=confirmar_venta" onsubmit="return confirm('¿Confirmar cobro y venta de este libro?');">
+                                    <form method="POST" action="Index.php?action=confirmar_venta" onsubmit="return confirm('¿Confirmar entrega y cobro de este libro?');">
                                         <input type="hidden" name="id_venta" value="<?= (int)$reserva['id'] ?>">
-                                        <button type="submit" class="btn-confirmar">Vender</button>
+                                        <button type="submit" class="btn-confirmar">Finalizar</button>
                                     </form>
 
                                     <form method="POST" action="Index.php?action=cancelar_reserva" onsubmit="return confirm('¿Estás seguro de cancelar esta reserva?');">
@@ -199,16 +208,17 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php endif; ?>
 
         <?php if (!empty($ventasConcretadas)): ?>
-            <h3 class="panel-title" style="font-size: 1.5rem; margin-top: 40px;">Últimas Ventas Concretadas</h3>
+            <h3 class="panel-title" style="font-size: 1.5rem; margin-top: 40px;">Historial de Reservas Finalizadas / Compradas</h3>
             <table class="tabla-reservas" style="margin-top: 15px;">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Fecha Venta</th>
+                        <th>Fecha Finalizada</th>
                         <th>Cliente</th>
                         <th>Libro</th>
                         <th>Cant.</th>
                         <th>Total</th>
+                        <th>Estado</th>
                         <th>Atendido Por</th>
                     </tr>
                 </thead>
@@ -221,6 +231,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             <td><?= htmlspecialchars($venta['libro_titulo'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= (int)$venta['cantidad'] ?></td>
                             <td>$<?= number_format((float)$venta['total'], 2, ',', '.') ?></td>
+                            <td><span class="badge-finalizado">Finalizado</span></td>
                             <td><?= htmlspecialchars($venta['atendido_por_nombre'] ?? $venta['atendido_por'] ?? 'Sistema', ENT_QUOTES, 'UTF-8') ?></td>
                         </tr>
                     <?php endforeach; ?>
