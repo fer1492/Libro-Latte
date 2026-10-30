@@ -1,4 +1,11 @@
-<!-- Views/inicio.php -->
+<?php
+// Views/inicio.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$esBibliotecario = isset($_SESSION['usuario_rol']) && in_array(strtolower(trim((string)$_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root']);
+$estaLogueado = isset($_SESSION['usuario_cedula']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,16 +15,16 @@
     <meta name="description" content="Proyecto Semestral TH2: Libro&Latte">
     <title>Bienvenidos a Libro&Latte</title>
     
-    <!-- Rutas corregidas apuntando a las carpetas dentro de Public -->
-    <link rel="stylesheet" href="../Public/css/Style.css">
-    <link rel="stylesheet" href="../Public/css/Media-Querry.css">
+    <!-- Rutas apuntando a las carpetas dentro de Public -->
+    <link rel="stylesheet" href="css/Style.css">
+    <link rel="stylesheet" href="css/Media-Querry.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e7c741f98a.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
         <div id="logo">
-            <img src="../Public/Assets/Logo transparente.png" alt="logo-libro&latte">
+            <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
         </div>
 
         <h1>Biblioteca Libro&Latte</h1>
@@ -27,41 +34,37 @@
                 <ul>
                     <li><a class="header-links" href="Index.php?action=catalogo">Catálogo Disponible</a></li>
                     <li><a class="header-links" href="#favourites">Favoritos y Recomendaciones</a></li>
-                    <li><a class="header-links" href="#Search">Busqueda</a></li>
-                    <?php if (
-                                isset($_SESSION['usuario_rol']) &&
-                                strtolower(trim((string) $_SESSION['usuario_rol'])) === 'bibliotecario'
-                                ): ?>
-                    <li>
-                    <a class="header-links" href="Index.php?action=formulario_libro">
-                        Agregar libro
-                    </a>
-                </li>
-                    <li><a class="header-links" href="Index.php?action=panel_reservas">Panel Reservas</a></li>
-            <?php endif; ?>
-        </ul>
-    </nav>
-</div> 
+                    <li><a class="header-links" href="#Search">Búsqueda</a></li>
+                    <?php if ($estaLogueado && !$esBibliotecario): ?>
+                        <li><a class="header-links" href="Index.php?action=mis_reservas">Mis Reservas</a></li>
+                    <?php endif; ?>
+                    <?php if ($esBibliotecario): ?>
+                        <li><a class="header-links" href="Index.php?action=formulario_libro">Agregar libro</a></li>
+                        <li><a class="header-links" href="Index.php?action=panel_reservas">Panel Reservas</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+        </div> 
 
         <!-- Menú de usuario ubicado de forma independiente y libre en el header -->
         <div id="user-menu" class="user-menu">
-            <?php if (isset($_SESSION['usuario_cedula'])): ?>
+            <?php if ($estaLogueado): ?>
                 <span class="saludo-usuario-header">
                     ¡Hola, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>!
                 </span>
             <?php endif; ?>
             <button id="button-user" type="button">
-                <img id="user" src="../Public/Assets/icons/icono usuario.png" alt="user">
+                <img id="user" src="Assets/icons/icono usuario.png" alt="user">
             </button>
 
             <div id="user-inactive">
-                <?php if (isset($_SESSION['usuario_cedula'])): ?>
+                <?php if ($estaLogueado): ?>
                     <p style="font-size: 0.95rem; font-weight: bold; color: #4a2e18; margin: 0; text-align: center;">
                         ¡Hola, <?= htmlspecialchars(trim(($_SESSION['usuario_nombre'] ?? '') . ' ' . ($_SESSION['usuario_apellido'] ?? '')), ENT_QUOTES, 'UTF-8') ?>!
                     </p>
                     <span class="badge-rol">(<?= htmlspecialchars($_SESSION['usuario_rol'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>)</span>
                     <hr class="line-user">
-                    <?php if (isset($_SESSION['usuario_rol']) && in_array(strtolower(trim((string)$_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root'])): ?>
+                    <?php if ($esBibliotecario): ?>
                         <a href="Index.php?action=panel_reservas" class="user-menu-link-btn">Panel Reservas</a>
                         <a href="Index.php?action=formulario_libro" class="user-menu-link-btn">Agregar Libro</a>
                     <?php else: ?>
@@ -70,35 +73,41 @@
                     <hr class="line-user">
                     <a href="Index.php?action=logout" class="user-menu-link-btn btn-logout">Cerrar Sesión</a>
                 <?php else: ?>
-                <p>Profile</p>
-                <hr class="line-user">
-                <button class="user-menu-link" id="user-menu-link-login" type="button">Inicio de Sesion</button>
-                <button class="user-menu-link" id="user-menu-link-register" type="button">Registro</button>
+                    <p>Profile</p>
+                    <hr class="line-user">
+                    <button class="user-menu-link" id="user-menu-link-login" type="button">Inicio de Sesión</button>
+                    <button class="user-menu-link" id="user-menu-link-register" type="button">Registro</button>
                 <?php endif; ?>
             </div>
         </div> 
     </header>
 
     <main>
-        <?php if (isset($_SESSION['usuario_cedula'])): ?>
+        <?php if ($estaLogueado): ?>
             <div class="banner-bienvenida">
                 <span>
                     👋 ¡Hola, <strong><?= htmlspecialchars(trim(($_SESSION['usuario_nombre'] ?? '') . ' ' . ($_SESSION['usuario_apellido'] ?? '')), ENT_QUOTES, 'UTF-8') ?></strong>! Bienvenido a tu cuenta en Libro&Latte.
                 </span>
-
             </div>
         <?php endif; ?>
+
+        <?php if (isset($_GET['reserva']) && $_GET['reserva'] === 'ok'): ?>
+            <div class="banner-bienvenida" style="background: #d4edda; border-color: #28a745; color: #155724;">
+                <span>¡Tu reserva ha sido registrada con éxito! Pasa por la biblioteca para que el personal te entregue el libro.</span>
+            </div>
+        <?php endif; ?>
+
         <section id="about">
             <h2>Sobre Nosotros</h2>
-            <p>Te damos la bienvenida a Libro&Latte, una libreria joven que fue creada para brindarte la mejor experiencia entre vos, un libro y café.</p> 
+            <p>Te damos la bienvenida a Libro&Latte, una librería joven que fue creada para brindarte la mejor experiencia entre vos, un libro y café.</p> 
             <div id="carousel">
                 <button class="prev" id="leftCarret" onclick="plusSlides(-1)" type="button">&lt;</button>
                 <div id="carousel-img">
-                    <img id="image1" src="../Public/Assets/valledelacalma.png" alt="library image" class="img">
-                    <img id="image2" src="../Public/Assets/elhobbit.png" alt="library image" class="img">
-                    <img id="image3" src="../Public/Assets/condorito.png" alt="library image" class="img">
-                    <img id="image4" src="../Public/Assets/elultimomohicano.png" alt="library image" class="img">
-                    <img id="image5" src="../Public/Assets/deadpool.png" alt="library image" class="img">
+                    <img id="image1" src="Assets/valledelacalma.png" alt="library image" class="img">
+                    <img id="image2" src="Assets/elhobbit.png" alt="library image" class="img">
+                    <img id="image3" src="Assets/condorito.png" alt="library image" class="img">
+                    <img id="image4" src="Assets/elultimomohicano.png" alt="library image" class="img">
+                    <img id="image5" src="Assets/deadpool.png" alt="library image" class="img">
                 </div>
                 <button class="next" id="rightCarret" onclick="plusSlides(1)" type="button">&gt;</button>
             </div>      
@@ -112,8 +121,8 @@
                 <legend>Elige Tus Favoritos</legend>
 
                 <div class="fieldset-radio">
-                    <input type="radio" id="ficcion" name="categoria" class="categoria" value="ficcion">
-                    <label for="ficcion">Ficcion</label>
+                    <input type="radio" id="ficcion" name="categoria" class="categoria" value="ficcion" checked>
+                    <label for="ficcion">Ficción</label>
                 </div>
                 <div class="fieldset-radio">
                     <input type="radio" id="no-ficcion" name="categoria" class="categoria" value="no-ficcion">
@@ -133,78 +142,95 @@
                 </div>
                 <div class="fieldset-radio">
                     <input type="radio" id="comic" name="categoria" class="categoria" value="comic">
-                    <label for="comic">Comic</label>
+                    <label for="comic">Cómic</label>
                 </div>
             </fieldset>
 
             <div id="Favorite-items">
-                <div class="favourites-items ficcion hidden">
-                    <h3>Proyecto Hail Mary<br>De: Andy Weir</h3>
-                    <p class="book-description">Ryland Grace despierta completamente solo en una nave espacial, sin recordar quién es ni cómo llegó allí. Poco a poco descubre que tiene una misión crucial para salvar a la humanidad. Una historia de ciencia ficción que combina misterio, aventura, ciencia y momentos de gran tensión.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book1" src="../Public/Assets/Proyecto Hail MaryAndy Weir.png" alt="Proyecto Hail Mary" class="img-books">
-                </div>
+                <?php if (empty($libros)): ?>
+                    <p id="sin-libros-general" style="text-align: center; color: #70452F; font-size: 1.2rem; font-family: 'Cinzel', serif; margin: 30px auto; width: 100%;">
+                        Actualmente no disponemos de libros cargados en el sistema.
+                    </p>
+                <?php else: ?>
+                    <?php foreach ($libros as $libro): ?>
+                        <?php 
+                            $catLibro = strtolower(trim($libro['categoria'] ?? 'ficcion'));
+                            $esFiccion = ($catLibro === 'ficcion');
+                        ?>
+                        <div class="favourites-items <?= htmlspecialchars($catLibro, ENT_QUOTES, 'UTF-8') ?> <?= $esFiccion ? '' : 'hidden' ?>" data-categoria="<?= htmlspecialchars($catLibro, ENT_QUOTES, 'UTF-8') ?>">
+                            <h3>
+                                <?= htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') ?><br>
+                                <span style="font-size: 1rem; color: #555;">De: <?= htmlspecialchars($libro['autor'], ENT_QUOTES, 'UTF-8') ?></span>
+                            </h3>
 
-                <div class="favourites-items no-ficcion">
-                    <h3>La generación ansiosa<br>De: Jonathan Haidt</h3>
-                    <p class="book-description">Jonathan Haidt analiza cómo el uso constante de los teléfonos inteligentes y las redes sociales ha transformado la infancia y la adolescencia. A partir de investigaciones y datos, el autor explora sus posibles efectos sobre el bienestar, las relaciones sociales y la forma en que los jóvenes se desarrollan.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book2" src="../Public/Assets/la generacion ansiosa.png" alt="La Generacion Ansiosa" class="img-books">
-                </div>
+                            <?php if (!empty($libro['descripcion'])): ?>
+                                <p class="book-description">
+                                    <?= htmlspecialchars($libro['descripcion'], ENT_QUOTES, 'UTF-8') ?>
+                                </p>
+                            <?php endif; ?>
 
-                <div class="favourites-items infantil-y-juvenil hidden">
-                    <h3>Amari y los hermanos de la noche<br>De: B. B. Alston</h3>
-                    <p class="book-description">Amari está decidida a encontrar a su hermano desaparecido y descubre un mundo secreto lleno de magia y criaturas extraordinarias. Para encontrar respuestas deberá enfrentarse a numerosos desafíos y demostrar su valentía. Una aventura fantástica llena de misterio, amistad y acción.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book3" src="../Public/Assets/Amari y los hermanos de la noche.png" alt="Amari y los hermanos de la noche" class="img-books">
-                </div>
+                            <p class="stock-info" style="margin: 10px 0; font-size: 1.05rem;">
+                                <strong>Precio:</strong> $<?= number_format((float)$libro['precio'], 2, ',', '.') ?> &nbsp;|&nbsp;
+                                <strong>Stock:</strong> 
+                                <?php if ((int)$libro['stock'] > 0): ?>
+                                    <span style="color: #2e7d32; font-weight: bold;"><?= (int)$libro['stock'] ?> disponibles</span>
+                                <?php else: ?>
+                                    <span style="color: #c62828; font-weight: bold;">Sin stock</span>
+                                <?php endif; ?>
+                            </p>
 
-                <div class="favourites-items textos hidden">
-                    <h3>El infinito en un junco<br>De: Irene Vallejo</h3>
-                    <p class="book-description">Irene Vallejo realiza un recorrido por la historia de los libros y la lectura, desde las antiguas civilizaciones hasta nuestros días. A través de relatos históricos y anécdotas, muestra cómo los textos han acompañado a la humanidad y han permitido conservar nuestras ideas y conocimientos.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book4" src="../Public/Assets/El infinito en un junco.png" alt="El infinito en un junco" class="img-books">
-                </div>
+                            <div class="acciones-libro" style="margin: 10px 0;">
+                                <?php if ($esBibliotecario): ?>
+                                    <span class="btn-admin-badge" style="display:inline-block; max-width: 200px; text-align: center;">Modo Administrador</span>
+                                <?php elseif ((int)$libro['stock'] > 0): ?>
+                                    <?php if ($estaLogueado): ?>
+                                        <form method="POST" action="Index.php?action=reservar" style="display:inline-block;">
+                                            <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn'], ENT_QUOTES, 'UTF-8') ?>">
+                                            <input type="hidden" name="cantidad" value="1">
+                                            <button type="submit" class="buy">Reservar Ahora</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button type="button" class="buy btn-requiere-registro" data-titulo="<?= htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') ?>">
+                                            Reservar Ahora
+                                        </button>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <button type="button" class="buy" style="background-color: #999; cursor: not-allowed;" disabled>
+                                        Sin Stock
+                                    </button>
+                                <?php endif; ?>
+                            </div>
 
-                <div class="favourites-items manga hidden">
-                    <h3>Jujutsu Kaisen<br>De: Gege Akutami</h3>
-                    <p class="book-description">Yuji Itadori lleva una vida normal hasta que entra en contacto con un objeto maldito que cambia su destino. Después de convertirse en el recipiente de una poderosa maldición, comienza a entrenar para combatir criaturas sobrenaturales. Un manga intenso que combina acción, terror, humor y personajes memorables.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book5" src="../Public/Assets/jujutsu-kaisen.png" alt="Jujutsu Kaisen" class="img-books">
-                </div>
+                            <?php if (!empty($libro['imagen'])): ?>
+                                <img src="<?= htmlspecialchars($libro['imagen'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') ?>" class="img-books">
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
 
-                <div class="favourites-items comic hidden">
-                    <h3>DeadPool<br>De: Marvel</h3>
-                    <p class="book-description">Wade Wilson es un mercenario que, después de someterse a un peligroso experimento, obtiene habilidades de regeneración y adopta la identidad de Deadpool. Con su particular sentido del humor, rompe constantemente las reglas y se enfrenta a enemigos mientras combina acción, violencia y situaciones absurdas. Un cómic ideal para quienes buscan superhéroes con un estilo diferente y mucho humor.</p>
-                    <button type="button" class="buy buy-before-login">Compralo Ya!</button>
-                    <button type="button" class="rent rent-before-login">Alquilalo Ahora!</button>
-                    <img id="book6" src="../Public/Assets/deadpool.png" alt="DeadPool" class="img-books">
-                </div>
+                <p id="sin-libros-categoria-msg" class="hidden" style="text-align: center; color: #70452F; font-size: 1.2rem; font-family: 'Cinzel', serif; margin: 30px auto; width: 100%;">
+                    Actualmente no disponemos de libros en esta categoría.
+                </p>
             </div>
         </section>
 
         <section id="Search">
-            <h2>Busqueda por titulo, autor, codigo ISBN</h2> 
+            <h2>Búsqueda por título, autor, código ISBN</h2> 
             <hr class="line">
 
             <form class="search-form" action="Index.php" method="GET">
                 <input type="hidden" name="action" value="buscar_isbn">
 
                 <input
-                    type="sear"
+                    type="search"
                     id="search-input"
                     name="isbn"
-                    placeholder="Ingresa el codigo ISBN"
+                    placeholder="Ingresa el código ISBN"
                     value="<?= htmlspecialchars($_GET['isbn'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                     required
                 > 
 
-            <button type="submit" id="search-button">Buscar</button>
+                <button type="submit" id="search-button">Buscar</button>
             </form>
 
             <div id="search-result">
@@ -234,9 +260,30 @@
                             <strong>Stock Disponible:</strong>
                             <?= (int)$resultado['stock'] ?>
                         </p>
-                    </article>
 
-            <?php endif; ?>
+                        <div style="margin-top: 15px;">
+                            <?php if ($esBibliotecario): ?>
+                                <span class="btn-admin-badge" style="display:inline-block; max-width: 200px;">Modo Administrador</span>
+                            <?php elseif ((int)$resultado['stock'] > 0): ?>
+                                <?php if ($estaLogueado): ?>
+                                    <form method="POST" action="Index.php?action=reservar" style="display:inline-block;">
+                                        <input type="hidden" name="isbn" value="<?= htmlspecialchars($resultado['isbn'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <input type="hidden" name="cantidad" value="1">
+                                        <button type="submit" class="buy">Reservar Ahora</button>
+                                    </form>
+                                <?php else: ?>
+                                    <button type="button" class="buy btn-requiere-registro" data-titulo="<?= htmlspecialchars($resultado['titulo'], ENT_QUOTES, 'UTF-8') ?>">
+                                        Reservar Ahora
+                                    </button>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <button type="button" class="buy" style="background-color: #999; cursor: not-allowed;" disabled>
+                                    Sin Stock
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                    </article>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -248,16 +295,16 @@
                     <li>Por Consultas:
                         <a class="tel" href="tel:+59822086787" target="_blank">(+598)22086787</a>
                     </li>
-                    <li>Servicio Tecnico de Cuenta:
+                    <li>Servicio Técnico de Cuenta:
                         <a class="tel" href="tel:+59822086787" target="_blank">(+598)22086787</a>
                     </li>
-                    <li id="contact-staff">Contacto via mail:
-                        <a id="mail" href="mailto:contacto@libro&latte.com" target="_blank">Atencion Cliente</a> 
+                    <li id="contact-staff">Contacto vía email:
+                        <a id="mail" href="mailto:contacto@libro&latte.com" target="_blank">Atención Cliente</a> 
                     </li>
                 </ol>
 
                 <a class="adress" href="https://maps.app.goo.gl/uGDPaUuvHJdRLTxd7" target="_blank">
-                    <img id="map" src="../Public/Assets/icons/mapa icono.png" alt="map">
+                    <img id="map" src="Assets/icons/mapa icono.png" alt="map">
                 </a>
             </div> 
         </section>
@@ -266,13 +313,27 @@
     <footer>LIBRO&LATTE</footer> 
 
     <!-- Contenedor general para modales flotantes -->
-   <div id="overlay" class="overlay">
-    <?php require_once __DIR__ . '/../Views/login.php'; ?>
-    <?php require_once __DIR__ . '/../Views/registro.php'; ?>
-</div>
+    <div id="overlay" class="overlay">
+        <!-- Modal informativo amigable antes de registrarse -->
+        <div id="modal-aviso-socio" class="modal">
+            <button class="close-button" type="button">x</button>
+            <h3>¡Conviértete en Socio!</h3>
+            <p id="aviso-socio-mensaje">
+                Para reservar y retirar libros en <strong>Libro&Latte</strong> necesitas registrarte con tu cuenta de socio. ¡Es rápido y gratis!
+            </p>
+            <button type="button" class="btn-modal-opcion btn-modal-registro" id="btn-ir-modal-registro">
+                Quiero Registrarme
+            </button>
+            <button type="button" class="btn-modal-opcion btn-modal-login" id="btn-ir-modal-login">
+                Ya tengo cuenta (Iniciar Sesión)
+            </button>
+        </div>
+
+        <?php require_once __DIR__ . '/login.php'; ?>
+        <?php require_once __DIR__ . '/registro.php'; ?>
+    </div>
 
     <!-- Script JS desde la carpeta Public -->
-    <script src="../Public/JS/index.js" defer></script>
-
+    <script src="JS/index.js" defer></script>
 </body>
 </html>

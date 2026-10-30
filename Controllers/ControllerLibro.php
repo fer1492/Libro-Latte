@@ -1,4 +1,3 @@
-
 <?php
 
 require_once __DIR__ . '/../Models/RepositorioLibro.php';
@@ -13,27 +12,22 @@ class ControllerLibro
         $this->repo = new RepositorioLibro($conexion);
     }
 
-    //Se inicia la sesion en caso de que la sesion no este inciada
+    // Se inicia la sesión en caso de que no esté iniciada
     private function iniciarSesion() {
         if (session_status() === PHP_SESSION_NONE) {
-
             session_start();
-
-
-
         }
     }
 
-    //Comprueba que el usuario sea bibliotecario
+    // Comprueba que el usuario sea bibliotecario o admin
     private function esBibliotecario() {
         $this->iniciarSesion();
 
         return isset($_SESSION['usuario_rol']) &&
             in_array(strtolower(trim((string) $_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root']);
-
     }
 
-    // Mostrar la página de inicio con los libros
+    // Mostrar la página de inicio con los libros cargados
     public function listar($mensaje = '')
     {
         $libros = $this->repo->buscarlibro();
@@ -59,22 +53,25 @@ class ControllerLibro
             }
         }
 
+        // Cargamos también los libros de categorías para que la sección de inicio no quede vacía
+        $libros = $this->repo->buscarlibro();
+
         require __DIR__ . '/../Views/inicio.php';
     }
 
-    //Muestra formulario solo a bibliotecario
+    // Muestra formulario solo a bibliotecario
     public function mostrarFormulario() {
         if (!$this->esBibliotecario()) {
             http_response_code(403);
-            exit('No tenes permiso para acceder a esta seccion. Perdon');
+            exit('No tenes permiso para acceder a esta seccion.');
         }
 
         $mensaje = '';
-        require __DIR__ . '/../Views/agregar_libro.php';
+        require __DIR__ . '/../Views/agregar_Libro.php';
     }
 
     // Registrar un libro SOLO BIBLIOTECARIO
-     public function crear()
+    public function crear()
     {
         if (!$this->esBibliotecario()) {
             http_response_code(403);
@@ -92,6 +89,7 @@ class ControllerLibro
             $isbn        = trim($_POST['isbn'] ?? '');
             $titulo      = trim($_POST['titulo'] ?? '');
             $autor       = trim($_POST['autor'] ?? '');
+            $categoria   = trim($_POST['categoria'] ?? 'ficcion');
             $precio      = $_POST['precio'] ?? '';
             $stock       = $_POST['stock'] ?? '';
             $descripcion = trim($_POST['descripcion'] ?? '');
@@ -125,7 +123,8 @@ class ControllerLibro
                 (float) $precio,
                 (int) $stock,
                 $descripcion,
-                $imagen
+                $imagen,
+                $categoria
             );
 
             $this->repo->agregarLibro($libro);
@@ -142,7 +141,7 @@ class ControllerLibro
             $mensaje = $e->getMessage();
         }
 
-        require __DIR__ . '/../Views/agregar_libro.php';
+        require __DIR__ . '/../Views/agregar_Libro.php';
     }
 
     // Mostrar catálogo

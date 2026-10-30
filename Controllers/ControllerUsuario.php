@@ -1,73 +1,112 @@
 <?php
+// Controllers/ControllerUsuario.php
 
-
-require_once '../Models/Usuario.php';
-require_once '../Models/RepositorioUsuario.php';
+require_once __DIR__ . '/../Models/Usuario.php';
+require_once __DIR__ . '/../Models/RepositorioUsuario.php';
 
 class ControllerUsuario {
     private RepositorioUsuario $repo;
 
-    public function __construct($conexion) {
+    public function __construct(PDO $conexion) {
         $this->repo = new RepositorioUsuario($conexion);
     }
 
     // --- 1. REGISTRO DE USUARIOS ---
     public function registrar() {
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            header("Location: index.php");
+            header("Location: Index.php");
             exit;
         }
 
+        $origen   = trim($_POST["origen"] ?? "inicio");
+        $redirect = ($origen === 'catalogo') ? "Index.php?action=catalogo" : "Index.php";
+        $sep      = (strpos($redirect, '?') !== false) ? '&' : '?';
+
         $nombre   = trim($_POST["nombre"] ?? "");
-        $apellido = trim($_POST["apellido"] ?? ""); // Concatenamos si quieres guardar nombre completo
-        $cedula   = trim($_POST["cedula"] ?? "");
-        $email    = trim($_POST["email"] ?? "");
+        $apellido = trim($_POST["apellido"] ?? "");
+        $cedula   = preg_replace('/[^0-9]/', '', $_POST["cedula"] ?? "");
+        $email    = trim(strtolower($_POST["email"] ?? ""));
         $password = $_POST["contrasena"] ?? "";
 
-        $nombreCompleto = trim("$nombre $apellido");
-
-        // Validaciones básicas
-        if (empty($cedula) || empty($nombreCompleto) || empty($email) || empty($password)) {
-            exit("Por favor, completa todos los campos requeridos.");
+        // Validaciones básicas amigables (sin exit que rompa la pantalla)
+        if (empty($cedula) || empty($nombre) || empty($email) || empty($password)) {
+            header("Location: {$redirect}{$sep}error_registro=campos_vacios");
+            exit;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            exit("El email no tiene un formato válido.");
+            header("Location: {$redirect}{$sep}error_registro=email_invalido");
+            exit;
         }
 
         if (strlen($password) < 8) {
-            exit("La contraseña debe tener al menos 8 caracteres.");
+            header("Location: {$redirect}{$sep}error_registro=password_corta");
+            exit;
         }
 
-        // Hasheamos la contraseña antes de crear la Entidad Usuario
-        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+        try {
+            // Verificar si la cédula ya existe para evitar errores fatales de SQL
+            if ($this->repo->buscarPorCedula($cedula)) {
+                header("Location: {$redirect}{$sep}error_registro=cedula_repetida");
+                exit;
+            }
 
-        // Instanciamos el modelo Usuario con las variables exactas de tu imagen
-        $usuario = new Usuario($cedula, $nombreCompleto, $email, $hashPassword, 'cliente');
+            // Verificar si el email ya existe
+            if ($this->repo->buscarPorEmail($email)) {
+                header("Location: {$redirect}{$sep}error_registro=email_repetido");
+                exit;
+            }
 
-        // Guardamos a través del repositorio
-        $exito = $this->repo->registrar($usuario);
+            // Hashear contraseña de forma segura
+            $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        if ($exito) {
-            header("Location: index.php?registro=ok");
+            // Crear entidad Usuario (con rol 'Socio')
+            $usuario = new Usuario($cedula, $nombre, $email, $hashPassword, 'Socio', $apellido);
+
+            // Guardar a través del repositorio
+            $exito = $this->repo->registrar($usuario);
+
+            if ($exito) {
+                // Iniciar sesión automáticamente tras el registro
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                $_SESSION['usuario_cedula']   = $cedula;
+                $_SESSION['usuario_nombre']   = $nombre;
+                $_SESSION['usuario_apellido'] = $apellido;
+                $_SESSION['usuario_rol']      = 'Socio';
+
+                header("Location: {$redirect}{$sep}registro=ok");
+                exit;
+            } else {
+                header("Location: {$redirect}{$sep}error_registro=fallo_bd");
+                exit;
+            }
+        } catch (Exception $e) {
+            error_log("Error en registro: " . $e->getMessage());
+            header("Location: {$redirect}{$sep}error_registro=fallo_bd");
             exit;
-        } else {
-            exit("Ocurrió un error al registrar el usuario.");
         }
     }
 
     // --- 2. INICIO DE SESIÓN (LOGIN) ---
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            header("Location: index.php");
+            header("Location: Index.php");
             exit;
         }
 
-        $email    = trim($_POST["email"] ?? "");
+        $origen   = trim($_POST["origen"] ?? "inicio");
+        $redirect = ($origen === 'catalogo') ? "Index.php?action=catalogo" : "Index.php";
+        $sep      = (strpos($redirect, '?') !== false) ? '&' : '?';
+
+        $email    = trim(strtolower($_POST["email"] ?? ""));
         $password = $_POST["contrasena"] ?? "";
 
         if (empty($email) || empty($password)) {
-            exit("Ingresa email y contraseña.");
+            header("Location: {$redirect}{$sep}error_login=campos_vacios");
+            exit;
         }
 
         // Buscamos si existe el usuario por email
@@ -79,15 +118,16 @@ class ControllerUsuario {
             }
 
             // Guardamos los datos clave en la sesión
-            $_SESSION['usuario_cedula'] = $usuarioBD['cedula'];
+            $_SESSION['usuario_cedula']   = $usuarioBD['cedula'];
             $_SESSION['usuario_nombre']   = $usuarioBD['nombre'];
             $_SESSION['usuario_apellido'] = $usuarioBD['apellido'] ?? '';
-            $_SESSION['usuario_rol']    = $usuarioBD['rol'];
+            $_SESSION['usuario_rol']      = $usuarioBD['rol'];
 
-            header("Location: index.php?login=ok");
+            header("Location: {$redirect}{$sep}login=ok");
             exit;
         } else {
-            exit("Email o contraseña incorrectos.");
+            header("Location: {$redirect}{$sep}error_login=credenciales_incorrectas");
+            exit;
         }
     }
 
@@ -114,7 +154,7 @@ class ControllerUsuario {
 
         session_destroy();
 
-        header("Location: index.php");
+        header("Location: Index.php");
         exit;
     }
 }

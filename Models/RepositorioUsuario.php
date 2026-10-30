@@ -1,27 +1,28 @@
 <?php
 // Models/RepositorioUsuario.php
 
-require_once 'Usuario.php';
+require_once __DIR__ . '/Usuario.php';
 
 class RepositorioUsuario {
-    private $conexion;
+    private PDO $conexion;
 
-    public function __construct($conexion) {
+    public function __construct(PDO $conexion) {
         $this->conexion = $conexion;
     }
 
     // Insertar un nuevo usuario en la base de datos
-    public function registrar(Usuario $usuario) {
-        $sql = "INSERT INTO usuarios (cedula, nombre, email, password, rol) 
-                VALUES (:cedula, :nombre, :email, :password, :rol)";
+    public function registrar(Usuario $usuario): bool {
+        $sql = "INSERT INTO usuarios (cedula, nombre, apellido, email, password, rol) 
+                VALUES (:cedula, :nombre, :apellido, :email, :password, :rol)";
         
         $stmt = $this->conexion->prepare($sql);
         
         return $stmt->execute([
             ':cedula'   => $usuario->getCedula(),
             ':nombre'   => $usuario->getNombre(),
+            ':apellido' => $usuario->getApellido(),
             ':email'    => $usuario->getEmail(),
-            ':password' => $usuario->getPassword(), // Ya debe venir hasheada desde el Controller
+            ':password' => $usuario->getPassword(),
             ':rol'      => $usuario->getRol()
         ]);
     }

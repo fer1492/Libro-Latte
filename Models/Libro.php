@@ -1,4 +1,3 @@
-
 <?php
 
 class Libro {
@@ -9,6 +8,7 @@ class Libro {
     private $stock;
     private $descripcion;
     private $imagen;
+    private $categoria;
 
     public function __construct(
         $isbn,
@@ -17,7 +17,8 @@ class Libro {
         $precio,
         $stock,
         $descripcion = '',
-        $imagen = ''
+        $imagen = '',
+        $categoria = 'ficcion'
     ) {
         $this->isbn = $isbn;
         $this->titulo = $titulo;
@@ -26,6 +27,7 @@ class Libro {
         $this->stock = $stock;
         $this->descripcion = $descripcion;
         $this->imagen = $imagen;
+        $this->categoria = $categoria;
     }
 
     // Getters
@@ -55,6 +57,10 @@ class Libro {
 
     public function getImagen() {
         return $this->imagen;
+    }
+
+    public function getCategoria() {
+        return $this->categoria;
     }
 }
 ?>

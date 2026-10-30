@@ -82,7 +82,7 @@ switch ($action) {
     // --- VISTA PRINCIPAL POR DEFECTO ---
     case 'inicio':
     default:
-        require_once '../Views/inicio.php';
+        $controllerLibro->listar();
         break;
 }
 ?>

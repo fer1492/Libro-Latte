@@ -35,7 +35,7 @@ nav ul li a {
     font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5;
+    letter-spacing: 0.5px;
 }
 
 #logo {
@@ -112,7 +112,7 @@ main p {
     width: 100%;
     background-color: #F7F0E5;
     padding: 20px 0;
-    gap: 15px
+    gap: 15px;
 }
 
 #carousel-img {
@@ -125,7 +125,7 @@ main p {
     border-radius: 8px;
 }
 
-.img{
+.img {
     width: 200px;
     max-width: 100%;
     height: auto;
@@ -169,15 +169,18 @@ main p {
 
 footer {
     background-color: #70452F;
-    color: #432719;
-    height: 100px;
+    color: #F7F0E5;
+    padding: 30px 20px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
 }
 
 header, main, footer {
     width: 100%;
 }
 
-/* User Button & Menu - Posicionado de forma independiente en la esquina */
+/* User Button & Menu */
 #user-menu {
     display: flex;
     align-items: center;
@@ -192,7 +195,7 @@ header, main, footer {
 #user {
     width: 25px;
     height: 25px;
-    pointer-events: none; /* Permite que el clic atraviese la imagen hacia el botón */
+    pointer-events: none;
 }
 
 #button-user {
@@ -228,7 +231,7 @@ h1 {
     color: #FFFFFF;
 }
 
-/* Menú desplegable oculto por defecto usando display: none */
+/* Menú desplegable oculto por defecto */
 #user-inactive {
     display: none;
     flex-direction: column;
@@ -245,10 +248,8 @@ h1 {
     background-color: #FFFFFF;
     box-shadow: 0 4px 8px rgba(67, 39, 25, 0.2);
     border-radius: 4px;
-    padding: 10px 0;
 }
 
-/* Al agregar la clase .open desde JS, se despliega */
 #user-menu.open #user-inactive {
     display: flex;
 }
@@ -276,7 +277,7 @@ h1 {
     justify-content: center;
 }
 
-#modal-login, #modal-register {
+#modal-login, #modal-register, .modal {
     display: none;
     flex-direction: column;
     width: 300px;
@@ -303,42 +304,175 @@ h1 {
     gap: 5px;
 }
 
-#favourite-items {
+/* Modal aviso socio */
+#modal-aviso-socio {
+    display: none;
+    flex-direction: column !important;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    padding: 30px 25px 25px 25px;
+    border-radius: 12px;
+    text-align: center;
+    width: 380px;
+    max-width: 90vw;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    position: relative;
+    box-sizing: border-box;
+    z-index: 1001;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+#modal-aviso-socio .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: #70452F;
+    font-weight: bold;
+    line-height: 1;
+}
+
+#modal-aviso-socio h3 {
+    font-family: 'Cinzel', serif;
+    color: #70452F;
+    margin: 10px 0 15px 0;
+    font-size: 1.6rem;
+    width: 100%;
+    display: block;
+}
+
+#modal-aviso-socio p {
+    font-size: 1.15rem;
+    color: #555;
+    margin: 0 0 20px 0;
+    line-height: 1.45;
+    width: 100%;
+    display: block;
+}
+
+.btn-modal-opcion {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 6px 0;
+    border-radius: 6px;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-modal-registro {
+    background-color: #70452F;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-modal-registro:hover {
+    background-color: #553322;
+}
+
+.btn-modal-login {
+    background-color: #f7ede2;
+    color: #70452F;
+    border: 1.5px solid #70452F;
+}
+
+.btn-modal-login:hover {
+    background-color: #ebdcd0;
+}
+
+/* ===== SECCIÓN DE FAVORITOS Y CATEGORÍAS ===== */
+#favourite-items, #Favorite-items {
     display: flex;
     flex-wrap: wrap;
+    gap: 25px;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     width: 100%;
-    max-width: 200px;
-    height: auto;
-    margin-top: 20px;
+    max-width: 1100px;
+    margin: 25px auto 0 auto;
 }
 
 .favourites-items {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     width: 100%;
-    max-width: 550px;
-    padding: 10px 20px 20px;
-    border: 1px solid black;
-    align-content: space-between;
+    max-width: 500px;
+    padding: 20px 24px;
+    border: 1px solid #d4c5b9;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(112, 69, 47, 0.08);
     justify-content: space-between;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.favourites-items h3 {
+    color: #4a2e18;
+    margin: 0 0 10px 0;
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+}
+
+.favourites-items .book-description {
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.favourites-items .stock-info {
+    font-size: 1.05rem;
+    margin: 10px 0;
+}
+
+.favourites-items .buy {
+    background-color: #70452F;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: inline-block;
+}
+
+.favourites-items .buy:hover {
+    background-color: #432719;
+}
+
+.favourites-items .buy:disabled {
+    background-color: #999;
+    cursor: not-allowed;
 }
 
 .img-books {
     display: block;
-    width: 150px;
+    width: 140px;
     height: auto;
-    margin: 20px 0 0 auto;
-    background-color: black;
+    max-height: 200px;
+    object-fit: cover;
+    margin: 15px 0 0 auto;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
-/*Apartado del Catalogo */
+/* Apartado del Catálogo */
 .catalogo {
     width: min(1200px, 92%);
     margin: 40px auto;
@@ -351,24 +485,21 @@ h1 {
     letter-spacing: 1px;
     color: #2c1a14;
     text-align: center;
-    
     border: 2px solid #70452F;
     padding: 18px 30px;
     border-radius: 8px;
-
     display: inline-block;
     margin: 0 auto 30px;
     background: #F7F0E5;
 }
 
-/*Distribucion de libros en catalogo */
+/* Distribución de libros en catálogo */
 .libros-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 25px;
 }
 
-/* Presentacion de libros en forma de tarjetas */
 .libro {
     padding: 18px;
     border-radius: 12px;
@@ -388,10 +519,9 @@ h1 {
 article.libro img {
     max-width: 100%;
     height: auto;
-    display: block; /* Evita espacios en blanco indeseados debajo de la imagen */
+    display: block;
 }
 
-/* Libro Disponible */
 .disponible {
     color: #267344;
     font-weight: bold;
@@ -456,10 +586,7 @@ article.libro img {
     font-weight: bold;
 }
 
-/* Personalizacion formulario agregar libro */
-
 /* ===== FORMULARIO AGREGAR LIBRO ===== */
-
 .formulario-libro {
     width: min(650px, 92%);
     margin: 40px auto;
@@ -480,10 +607,12 @@ article.libro img {
     display: block;
     margin-top: 14px;
     margin-bottom: 6px;
+    font-weight: 600;
 }
 
 .formulario-libro input,
-.formulario-libro textarea {
+.formulario-libro textarea,
+.formulario-libro select {
     display: block;
     box-sizing: border-box;
     width: 100%;
@@ -491,6 +620,7 @@ article.libro img {
     border: 1px solid #ccc;
     border-radius: 6px;
     font: inherit;
+    background-color: #fff;
 }
 
 .formulario-libro textarea {
@@ -526,15 +656,9 @@ article.libro img {
     color: #70452F;
 }
 
-
-
-
-
-
-
 @media (max-width: 768px) {
     .libros-grid {
-        -ms-grid-column: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -551,6 +675,7 @@ article.libro img {
     font-family: 'Cinzel', serif;
     white-space: nowrap;
 }
+
 .banner-bienvenida {
     background: #fff8f0;
     border-left: 5px solid #70452F;
@@ -566,6 +691,7 @@ article.libro img {
     justify-content: space-between;
     align-items: center;
 }
+
 .user-menu-link-btn {
     text-decoration: none;
     color: #4a2e18;
@@ -580,20 +706,36 @@ article.libro img {
     display: block;
     box-sizing: border-box;
 }
+
 .user-menu-link-btn:hover {
     background: #f4ece4;
 }
+
 .user-menu-link-btn.btn-logout {
     background-color: #dc3545;
     color: #ffffff;
     font-weight: 600;
     margin-top: 6px;
 }
+
 .user-menu-link-btn.btn-logout:hover {
     background-color: #c82333;
 }
+
 .badge-rol {
     font-size: 0.8rem;
     color: #888;
     text-transform: capitalize;
-    }
+}
+
+.btn-admin-badge {
+    background-color: #8b7355;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    cursor: default;
+    opacity: 0.85;
+}

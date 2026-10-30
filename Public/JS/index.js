@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     console.log("JS cargado correctamente.");
 
@@ -11,80 +10,128 @@ document.addEventListener("DOMContentLoaded", function () {
             e.stopPropagation();
             userMenu.classList.toggle("open");
         });
-    } else {
-        console.warn("Falta #button-user o #user-menu.");
     }
 
     // 2. Elementos de los modales
     const overlay = document.getElementById("overlay");
     const modalLogin = document.getElementById("modal-login");
     const modalRegister = document.getElementById("modal-register");
+    const modalAviso = document.getElementById("modal-aviso-socio");
 
-    // Abrir inicio de sesión
+    function cerrarTodosLosModales() {
+        if (overlay) overlay.classList.remove("overlay-open");
+        document.querySelectorAll(".modal").forEach(function (m) {
+            m.style.display = "none";
+        });
+        if (userMenu) userMenu.classList.remove("open");
+    }
+
+    function abrirModal(modal) {
+        cerrarTodosLosModales();
+        if (overlay && modal) {
+            overlay.classList.add("overlay-open");
+            modal.style.display = "flex";
+        }
+    }
+
+    // Botones de cerrar (x)
+    document.querySelectorAll(".close-button").forEach(function (button) {
+        button.addEventListener("click", cerrarTodosLosModales);
+    });
+
+    // Cerrar al hacer clic fuera del modal
+    if (overlay) {
+        overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) {
+                cerrarTodosLosModales();
+            }
+        });
+    }
+
+    // Abrir inicio de sesión desde el menú
     const linkLogin = document.getElementById("user-menu-link-login");
-
-    if (linkLogin && overlay && modalLogin && modalRegister) {
+    if (linkLogin) {
         linkLogin.addEventListener("click", function (e) {
             e.preventDefault();
-            overlay.classList.add("overlay-open");
-            modalRegister.style.display = "none";
-            modalLogin.style.display = "flex";
-
-            if (userMenu) userMenu.classList.remove("open");
+            abrirModal(modalLogin);
         });
     }
 
-    // Abrir registro
+    // Abrir registro desde el menú
     const linkRegister = document.getElementById("user-menu-link-register");
-
-    if (linkRegister && overlay && modalLogin && modalRegister) {
+    if (linkRegister) {
         linkRegister.addEventListener("click", function (e) {
             e.preventDefault();
-            overlay.classList.add("overlay-open");
-            modalLogin.style.display = "none";
-            modalRegister.style.display = "flex";
-
-            if (userMenu) userMenu.classList.remove("open");
+            abrirModal(modalRegister);
         });
     }
 
-    // 3. Cerrar modales
-    document.querySelectorAll(".close-button").forEach(function (button) {
-        button.addEventListener("click", function () {
-            if (overlay) overlay.classList.remove("overlay-open");
-
-            document.querySelectorAll(".modal").forEach(function (modal) {
-                modal.style.display = "none";
-            });
-
-            if (userMenu) userMenu.classList.remove("open");
+    // Botón "Reservar Ahora" presionado por usuario invitado (sin cuenta)
+    document.querySelectorAll(".btn-requiere-registro").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            const titulo = this.getAttribute("data-titulo") || "este libro";
+            const txt = document.getElementById("aviso-socio-mensaje");
+            if (txt) {
+                txt.innerHTML = "Para reservar <strong>" + titulo + "</strong> y retirarlo en la biblioteca, necesitas una cuenta de socio. ¡Es rápido y gratis!";
+            }
+            abrirModal(modalAviso);
         });
     });
 
-    // 4. Filtrar libros por categoría
-    const radios = document.querySelectorAll(
-        'input[type="radio"][name="categoria"]'
-    );
+    // Cambiar de aviso a Registro o Login
+    const btnIrRegistro = document.getElementById("btn-ir-modal-registro");
+    if (btnIrRegistro) {
+        btnIrRegistro.addEventListener("click", function () {
+            abrirModal(modalRegister);
+        });
+    }
 
+    const btnIrLogin = document.getElementById("btn-ir-modal-login");
+    if (btnIrLogin) {
+        btnIrLogin.addEventListener("click", function () {
+            abrirModal(modalLogin);
+        });
+    }
+
+    // 3. Filtrar libros dinámicos por categoría
+    function actualizarCategoria() {
+        const checkedRadio = document.querySelector('input[type="radio"][name="categoria"]:checked');
+        if (!checkedRadio) return;
+
+        const catVal = checkedRadio.value;
+        const allBooks = document.querySelectorAll("div.favourites-items");
+
+        allBooks.forEach(function (book) {
+            book.classList.add("hidden");
+        });
+
+        const selectedBooks = document.querySelectorAll(
+            `div.favourites-items.${CSS.escape(catVal)}`
+        );
+
+        selectedBooks.forEach(function (book) {
+            book.classList.remove("hidden");
+        });
+
+        const msgSinLibros = document.getElementById("sin-libros-categoria-msg");
+        if (msgSinLibros) {
+            if (selectedBooks.length === 0) {
+                msgSinLibros.classList.remove("hidden");
+            } else {
+                msgSinLibros.classList.add("hidden");
+            }
+        }
+    }
+
+    const radios = document.querySelectorAll('input[type="radio"][name="categoria"]');
     radios.forEach(function (radio) {
-        radio.addEventListener("change", function () {
-            const allBooks = document.querySelectorAll("div.favourites-items");
-
-            allBooks.forEach(function (book) {
-                book.classList.add("hidden");
-            });
-
-            const selectedBooks = document.querySelectorAll(
-                `div.favourites-items.${CSS.escape(radio.value)}`
-            );
-
-            selectedBooks.forEach(function (book) {
-                book.classList.remove("hidden");
-            });
-        });
+        radio.addEventListener("change", actualizarCategoria);
     });
 
-    // 5. Inicializar carrusel
+    // Ejecutar al cargar la página para reflejar la categoría activa
+    actualizarCategoria();
+
+    // 4. Inicializar carrusel
     showSlides(slideIndex);
 });
 
@@ -109,6 +156,3 @@ function showSlides(n) {
 
     slides[slideIndex - 1].style.display = "block";
 }
-
-
-

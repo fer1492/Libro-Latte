@@ -31,7 +31,7 @@ class ControllerVenta {
         $this->iniciarSesion();
 
         if (!isset($_SESSION['usuario_cedula'])) {
-            header('Location: Index.php?action=login_requerido');
+            header('Location: Index.php?action=catalogo&aviso=registro_requerido');
             exit;
         }
 

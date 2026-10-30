@@ -4,13 +4,15 @@
 class Usuario {
     private $cedula;
     private $nombre;
+    private $apellido;
     private $email;
     private $password;
     private $rol;
 
-    public function __construct($cedula, $nombre, $email, $password, $rol = 'cliente') {
+    public function __construct($cedula, $nombre, $email, $password, $rol = 'Socio', $apellido = '') {
         $this->cedula   = $cedula;
         $this->nombre   = $nombre;
+        $this->apellido = $apellido;
         $this->email    = $email;
         $this->password = $password;
         $this->rol      = $rol;
@@ -23,6 +25,10 @@ class Usuario {
 
     public function getNombre() {
         return $this->nombre;
+    }
+
+    public function getApellido() {
+        return $this->apellido;
     }
 
     public function getEmail() {
@@ -40,6 +46,10 @@ class Usuario {
     // --- SETTERS ---
     public function setNombre($nombre) {
         $this->nombre = $nombre;
+    }
+
+    public function setApellido($apellido) {
+        $this->apellido = $apellido;
     }
 
     public function setEmail($email) {

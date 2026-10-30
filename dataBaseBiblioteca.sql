@@ -28,6 +28,9 @@ CREATE TABLE `libros` (
   `autor` varchar(100) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  `categoria` varchar(50) NOT NULL DEFAULT 'ficcion',
   PRIMARY KEY (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -150,4 +153,7 @@ ADD COLUMN descripcion TEXT NULL;
 
 ALTER TABLE libros
 ADD COLUMN imagen VARCHAR(255) NULL;
+
+ALTER TABLE libros
+ADD COLUMN categoria VARCHAR(50) NOT NULL DEFAULT 'ficcion';
 
