@@ -16,12 +16,13 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <title>Bienvenidos a Libro&Latte</title>
     
     <!-- Rutas apuntando a las carpetas dentro de Public -->
-    <link rel="stylesheet" href="css/Style.css">
-    <link rel="stylesheet" href="css/Media-Querry.css">
+    <link rel="stylesheet" href="../Public/css/Style.css">
+    <link rel="stylesheet" href="../Public/css/Media-Querry.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e7c741f98a.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    
     <header>
         <div id="logo">
             <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
@@ -335,5 +336,11 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
 
     <!-- Script JS desde la carpeta Public -->
     <script src="JS/index.js" defer></script>
+    <a href="https://wa.me/59899123456?text=Hola,%20tengo%20una%20duda%20con%20el%20sistema%20de%20Libro-Latte" 
+       target="_blank" 
+       class="whatsapp-float" 
+       title="Soporte por WhatsApp">
+        💬
+    </a>
 </body>
 </html>
