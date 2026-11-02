@@ -157,3 +157,7 @@ ADD COLUMN imagen VARCHAR(255) NULL;
 ALTER TABLE libros
 ADD COLUMN categoria VARCHAR(50) NOT NULL DEFAULT 'ficcion';
 
+--para solucionar el error de la reserva
+ALTER TABLE ventas 
+ADD COLUMN estado VARCHAR(50) DEFAULT 'Pendiente';
+
