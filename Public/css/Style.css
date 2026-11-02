@@ -54,7 +54,7 @@ h1 {
     margin-left: 20px;
 }
 
-#logo {
+#logo a {
     display: flex;
     align-items: center;
     justify-content: center;

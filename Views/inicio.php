@@ -25,7 +25,9 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     
     <header>
         <div id="logo">
-            <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            <a href="../Public/Index.php">
+                <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            </a>
         </div>
 
         <h1>Biblioteca Libro&Latte</h1>
