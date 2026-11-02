@@ -3,6 +3,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Public/index.php
+// Definir la URL base global para solucionar los enlaces del logo en todas las vistas
+define('BASE_URL', 'http://localhost/LibreriaPaginaClon/Libro-Latte/Libro-Latte/Public/');
 
 // 1. Cargar la conexión a la base de datos
 require_once '../config/conexion.php';
