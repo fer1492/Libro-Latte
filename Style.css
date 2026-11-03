@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
 }
+
 body {
     background-color: #F7F0E5;
     color: #432719;
@@ -12,51 +13,93 @@ body {
     flex-direction: column;
 }
 
-
-header{
+/* --- CORRECCIÓN DEFINITIVA DEL HEADER --- */
+header {
     background-color: #70452F;
     color: #FFFFFF;
-    display: flex;
-    flex-direction: row;
-    position: relative; /* para que el menú se confine dentro del header */
-}
-
-h1 {
-    font-family: 'Playfair Display', serif;
-}
-
-nav {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between; 
-    width: 100%;
-}
-
-nav ul li a {
-    font-family: 'Cormorant Garamond', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5;
+    padding: 15px 30px;
+    gap: 20px;
 }
 
 #logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
 }
 
 #logo img {
-    width: 120px;
+    width: 100px;
     max-width: 100%;
     height: auto;
     object-fit: contain;
 }
 
-ul, ol {
-    list-style-type: none;
+h1 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 1.8rem;
+}
+
+/* Menú de usuario a la derecha del todo */
+#user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: end;
+}
+
+.saludo-usuario-header {
+    font-size: 0.85rem;
+    color: #f8f9fa;
+    white-space: nowrap;
+}
+
+#user-inactive {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 100;
+    width: 160px;
+    padding: 10px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#user-menu.open #user-inactive {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Barra de navegación inferior dentro del header o distribuida */
+#header-links {
+    grid-column: 1 / -1; /* Ocupa todo el ancho debajo del logo, título y usuario */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 12px;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 nav > ul {
@@ -67,18 +110,29 @@ nav > ul {
     padding: 0;
     margin: 0;
     background-color: #70452F;
-    gap: 20px; /* O usa justify-content si prefieres espacio entre ellos */
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-nav > ul a {
+nav ul li a, nav > ul a {
+    font-family: 'Cormorant Garamond', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: #F7F0E5;
     text-decoration: none;
-    padding: 12px 16px;
+    padding: 6px 10px;
     display: block;
 }
 
 nav > ul a:hover {
     color: #E4C28C;
+}
+
+ul, ol {
+    list-style-type: none;
 }
 
 main {
@@ -115,7 +169,7 @@ main p {
     width: 100%;
     background-color: #F7F0E5;
     padding: 20px 0;
-    gap: 15px
+    gap: 15px;
 }
 
 #carousel-img {
@@ -128,7 +182,7 @@ main p {
     border-radius: 8px;
 }
 
-.img{
+.img {
     width: 200px;
     max-width: 100%;
     height: auto;
@@ -174,7 +228,6 @@ footer {
     background-color: #70452F;
     color: #432719;
     height: 100px;
-
 }
 
 header, main, footer {
@@ -189,59 +242,19 @@ header, main, footer {
 
 #button-user {
     background-color: transparent;
-}
-
-#header-links {
-    width: auto;
-    display:flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    border: none;
+    cursor: pointer;
+    display: flex;
     align-items: center;
-    margin-right: 20px;
-    gap: 15px;
 }
 
 .header-links {
-    color: #FFFFFF
+    color: #FFFFFF;
 }
 
 a, button {
     text-decoration: none;
     cursor: pointer;
-}
-
-h1 {
-    margin-left: 20px;
-    color: #FFFFFF;
-}
-
-#user-menu {
-    position: relative; /* <-- ESTO ES LO CLAVE: le dice al menú que se confine al espacio del botón */
-    display: inline-block;
-}
-
-#user-inactive {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    position: absolute;
-    top: 100%; /* Justo debajo del botón */
-    left: 50%;
-    transform: translateX(-50%);  /* Alineado al borde derecho del botón */
-    z-index: 100;
-    width: 140px; /* Un poco más ancho para que entre bien el texto de "Inicio de Sesión" */
-    height: 130px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-#user-menu.open #user-inactive {
-    visibility: visible;
-    opacity: 1;
 }
 
 .line-user {
@@ -305,7 +318,7 @@ h1 {
     flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
-    max-width: 550px    ;
+    max-width: 550px;
     padding: 10px 20px 20px;
     border: 1px solid black;
     align-content: center;
@@ -322,78 +335,4 @@ h1 {
 
 .hidden {
     display: none;
-}
-
-
-/*A partir de aca, configuracion para moviles.
-/* Visibilidad en escritorio; las reglas de *media query* 
-en CSS prevalecen sobre esta configuración en anchos menores */
-/*.menu-burger-button,
-#open-menu-burger {
-    display: none;
-}
-
-.menu-burger-button {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 45px;
-    height: 24px;
-    margin-top: 25px;
-    margin-right: 20px;
-    margin-left: 20px;
-    cursor: pointer;
-    background-color: #E4C28C;
-    border: none;
-}
-
-.burger-lines {
-    width: 45px;
-    height: 0;
-    border: 1.5px solid #FFFFFF;
-    transition: transform 0.5s;
-    will-change: tranform;
-}
-
-#header-links.open .burger-lines:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
-} 
-
-#header-links.open .burger-lines:nth-child(2) {
-    opacity: 0;
-}
-
-#header-links.open .burger-lines:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
-}
-
-#open-menu-burger {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    width: min(330px, 100vw);
-    height: 370px;
-    padding-top: 10px;
-    padding-bottom: 100px;
-    visibility: hidden;
-    z-index: 1;
-    background-color: #E4C28C;
-    transform: translateX(100%);
-    transition: transform 0.5s, visibility 0.5;
-}
-
-.burger-menu-links {
-    text-decoration: none;
-    cursor: pointer;
-    color:#FFFFFF;
-}
-
-#header-links.open #open-menu-burger {
-    transform: translateX(0);
-    visibility: visible;
 }

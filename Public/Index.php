@@ -3,7 +3,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Public/index.php
-// Definir la URL base global para solucionar los enlaces del logo en todas las vistas
+
+// Definir la URL base global para las vistas
 define('BASE_URL', 'http://localhost/LibreriaPaginaClon/Libro-Latte/Libro-Latte/Public/');
 
 // 1. Cargar la conexión a la base de datos
@@ -14,7 +15,7 @@ require_once '../Controllers/ControllerUsuario.php';
 require_once '../Controllers/ControllerLibro.php';
 require_once '../Controllers/ControllerVenta.php';
 
-// 3. Capturar la acción enviada por URL (si no hay ninguna, la acción por defecto es 'inicio')
+// 3. Capturar la acción enviada por URL
 $action = $_GET['action'] ?? 'inicio';
 
 // 4. Instanciar los controladores pasando la conexión PDO
@@ -32,6 +33,22 @@ switch ($action) {
 
     case 'registro':
         $controllerUsuario->registrar();
+        break;
+
+    case 'listar_usuarios':
+        $controllerUsuario->listar();
+        break;
+
+    case 'editar_usuario':
+        $controllerUsuario->editar();
+        break;
+
+    case 'actualizar_usuario':
+        $controllerUsuario->actualizar();
+        break;
+
+    case 'eliminar_usuario':
+        $controllerUsuario->eliminar();
         break;
 
     case 'logout':
@@ -87,4 +104,3 @@ switch ($action) {
         $controllerLibro->listar();
         break;
 }
-?>

@@ -157,5 +157,56 @@ class ControllerUsuario {
         header("Location: Index.php");
         exit;
     }
+
+    // ==========================================
+    // --- 4. GESTIÓN Y ADMINISTRACIÓN DE USUARIOS ---
+    // ==========================================
+
+    // Listar todos los usuarios para el panel de administración
+    public function listar() {
+        $usuarios = $this->repo->obtenerTodos();
+        require_once __DIR__ . '/../Views/Usuario/listar_usuarios.php';
+    }
+
+    // Mostrar el formulario de edición para un usuario específico por su cédula
+    public function editar() {
+        $cedula = $_GET['id'] ?? null;
+        if ($cedula) {
+            $usuario = $this->repo->buscarPorCedula($cedula);
+            if ($usuario) {
+                require_once __DIR__ . '/../Views/Usuario/editar_usuario.php';
+                return;
+            }
+        }
+        header("Location: Index.php?action=listar_usuarios");
+        exit;
+    }
+
+    // Procesar la actualización de datos del usuario desde el formulario
+    public function actualizar() {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $cedula   = $_POST['cedula'] ?? '';
+            $nombre   = $_POST['nombre'] ?? '';
+            $apellido = $_POST['apellido'] ?? '';
+            $email    = $_POST['email'] ?? '';
+            $rol      = $_POST['rol'] ?? '';
+
+            if (!empty($cedula)) {
+                $this->repo->actualizar($cedula, $nombre, $apellido, $email, $rol);
+            }
+        }
+        header("Location: Index.php?action=listar_usuarios");
+        exit;
+    }
+
+    // Eliminar un usuario del sistema por su cédula
+    public function eliminar() {
+        $cedula = $_GET['id'] ?? null;
+        if ($cedula) {
+            $this->repo->eliminar($cedula);
+        }
+        header("Location: Index.php?action=listar_usuarios");
+        exit;
+    }
 }
 ?>

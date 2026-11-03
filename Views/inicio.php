@@ -23,43 +23,31 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
 </head>
 <body>
     
-    <header>
-        <div id="logo">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px 30px; background-color: #70452F;">
+        <!-- Logo a la izquierda -->
+        <div id="logo" style="flex: 0 0 auto; display: flex; align-items: center;">
             <a href="<?php echo BASE_URL; ?>index.php?action=inicio">
-                <img src="<?php echo BASE_URL; ?>Assets/Logo transparente.png" alt="Logo">
+                <img src="<?php echo BASE_URL; ?>Assets/Logo transparente.png" alt="Logo" style="max-height: 60px; width: auto;">
             </a>
         </div>
 
-        <h1>Biblioteca Libro&Latte</h1>
+        <!-- Título estrictamente centrado -->
+        <h1 style="flex: 1 1 auto; text-align: center; margin: 0; color: #FFFFFF; font-family: 'Playfair Display', serif; padding: 0 15px;">
+            Biblioteca Libro&Latte
+        </h1>
         
-        <div id="header-links">
-            <nav>
-                <ul>
-                    <li><a class="header-links" href="Index.php?action=catalogo">Catálogo Disponible</a></li>
-                    <li><a class="header-links" href="#favourites">Favoritos y Recomendaciones</a></li>
-                    <li><a class="header-links" href="#Search">Búsqueda</a></li>
-                    <?php if ($estaLogueado && !$esBibliotecario): ?>
-                        <li><a class="header-links" href="Index.php?action=mis_reservas">Mis Reservas</a></li>
-                    <?php endif; ?>
-                    <?php if ($esBibliotecario): ?>
-                        <li><a class="header-links" href="Index.php?action=formulario_libro">Agregar libro</a></li>
-                        <li><a class="header-links" href="Index.php?action=panel_reservas">Panel Reservas</a></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-        </div> 
-
-        <!-- Menú de usuario ubicado de forma independiente y libre en el header -->
-        <div id="user-menu" class="user-menu">
+        <!-- Menú de usuario a la derecha -->
+        <div id="user-menu" class="user-menu" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px; position: relative;">
             <?php if ($estaLogueado): ?>
-                <span class="saludo-usuario-header">
+                <span class="saludo-usuario-header" style="font-size: 0.85rem; color: #f8f9fa; white-space: nowrap;">
                     ¡Hola, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Socio', ENT_QUOTES, 'UTF-8') ?>!
                 </span>
             <?php endif; ?>
-            <button id="button-user" type="button">
-                <img id="user" src="Assets/icons/icono usuario.png" alt="user">
+            <button id="button-user" type="button" style="background:none; border:none; cursor:pointer; display: flex; align-items: center;">
+                <img id="user" src="Assets/icons/icono usuario.png" alt="user" style="width: 35px; height: 35px;">
             </button>
 
+            <!-- Contenedor desplegable manejado por CSS y JS (sin display inline forzado) -->
             <div id="user-inactive">
                 <?php if ($estaLogueado): ?>
                     <p style="font-size: 0.95rem; font-weight: bold; color: #4a2e18; margin: 0; text-align: center;">
@@ -70,6 +58,7 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                     <?php if ($esBibliotecario): ?>
                         <a href="Index.php?action=panel_reservas" class="user-menu-link-btn">Panel Reservas</a>
                         <a href="Index.php?action=formulario_libro" class="user-menu-link-btn">Agregar Libro</a>
+                        <a href="Index.php?action=listar_usuarios" class="user-menu-link-btn">Usuarios</a>
                     <?php else: ?>
                         <a href="Index.php?action=mis_reservas" class="user-menu-link-btn">Mis Reservas</a>
                     <?php endif; ?>
@@ -82,6 +71,25 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                     <button class="user-menu-link" id="user-menu-link-register" type="button">Registro</button>
                 <?php endif; ?>
             </div>
+        </div> 
+
+        <!-- Barra de navegación inferior ocupando todo el ancho en su propia línea -->
+        <div id="header-links" style="flex: 0 0 100%; width: 100%; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; display: flex; justify-content: center;">
+            <nav style="display: flex; justify-content: center; width: 100%;">
+                <ul style="display: flex; flex-direction: row; align-items: center; list-style: none; padding: 0; margin: 0; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                    <li><a class="header-links" href="Index.php?action=catalogo">Catálogo</a></li>
+                    <li><a class="header-links" href="#favourites">Favoritos</a></li>
+                    <li><a class="header-links" href="#Search">Búsqueda</a></li>
+                    <?php if ($estaLogueado && !$esBibliotecario): ?>
+                        <li><a class="header-links" href="Index.php?action=mis_reservas">Mis Reservas</a></li>
+                    <?php endif; ?>
+                    <?php if ($esBibliotecario): ?>
+                        <li><a class="header-links" href="Index.php?action=formulario_libro">Agregar Libro</a></li>
+                        <li><a class="header-links" href="Index.php?action=panel_reservas">Reservas</a></li>
+                        <li><a class="header-links" href="Index.php?action=listar_usuarios" style="color: #ffeb3b; font-weight: bold;">Usuarios</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
         </div> 
     </header>
 
@@ -113,7 +121,7 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                     <img id="image5" src="Assets/deadpool.png" alt="library image" class="img">
                 </div>
                 <button class="next" id="rightCarret" onclick="plusSlides(1)" type="button">&gt;</button>
-            </div>      
+            </div>    
         </section>
 
         <section id="favourites">
