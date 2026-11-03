@@ -235,8 +235,8 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                 <input
                     type="search"
                     id="search-input"
-                    name="isbn"
-                    placeholder="Ingresa el código ISBN"
+                    name="busqueda"
+                    placeholder="Busca por ISBN, Titulo o Autor..."
                     value="<?= htmlspecialchars($_GET['isbn'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                     required
                 > 
@@ -244,58 +244,107 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                 <button type="submit" id="search-button">Buscar</button>
             </form>
 
-            <div id="search-result">
-                <?php if (!empty($mensajeBusqueda)): ?>
-                    <p class="mensaje-busqueda">
-                        <?= htmlspecialchars($mensajeBusqueda, ENT_QUOTES, 'UTF-8') ?>
+           
+<div id="search-result">
+
+    <?php if (!empty($mensajeBusqueda)): ?>
+        <p class="mensaje-busqueda">
+            <?= htmlspecialchars($mensajeBusqueda, ENT_QUOTES, 'UTF-8') ?>
+        </p>
+    <?php endif; ?>
+
+    <?php if (!empty($resultados)): ?>
+
+        <div class="resultados-busqueda">
+            <h3>Resultados de búsqueda</h3>
+
+            <?php foreach ($resultados as $libro): ?>
+
+                <article class="resultado-libro">
+
+                    <h3>
+                        <?= htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') ?>
+                    </h3>
+
+                    <p>
+                        <strong>Autor:</strong>
+                        <?= htmlspecialchars($libro['autor'], ENT_QUOTES, 'UTF-8') ?>
                     </p>
-                <?php endif;?>
 
-                <?php if (!empty($resultado)): ?>
-                    <article class="resultado-libro">
-                        <h3>
-                            <?= htmlspecialchars($resultado['titulo'], ENT_QUOTES, 'UTF-8') ?>
-                        </h3>
+                    <p>
+                        <strong>ISBN:</strong>
+                        <?= htmlspecialchars($libro['isbn'], ENT_QUOTES, 'UTF-8') ?>
+                    </p>
 
-                        <p>
-                            <strong>Autor:</strong>
-                            <?= htmlspecialchars($resultado['autor'], ENT_QUOTES, 'UTF-8') ?>
-                        </p>
+                    <p>
+                        <strong>Precio:</strong>
+                        $<?= number_format((float)$libro['precio'], 2, ',', '.') ?>
+                    </p>
 
-                        <p>
-                            <strong>Precio:</strong>
-                            $<?= number_format((float)$resultado['precio'], 2, ',', '.') ?>
-                        </p>
+                    <p>
+                        <strong>Stock disponible:</strong>
+                        <?= (int)$libro['stock'] ?>
+                    </p>
 
-                        <p>
-                            <strong>Stock Disponible:</strong>
-                            <?= (int)$resultado['stock'] ?>
-                        </p>
+                    <div style="margin-top: 15px;">
 
-                        <div style="margin-top: 15px;">
-                            <?php if ($esBibliotecario): ?>
-                                <span class="btn-admin-badge" style="display:inline-block; max-width: 200px;">Modo Administrador</span>
-                            <?php elseif ((int)$resultado['stock'] > 0): ?>
-                                <?php if ($estaLogueado): ?>
-                                    <form method="POST" action="Index.php?action=reservar" style="display:inline-block;">
-                                        <input type="hidden" name="isbn" value="<?= htmlspecialchars($resultado['isbn'], ENT_QUOTES, 'UTF-8') ?>">
-                                        <input type="hidden" name="cantidad" value="1">
-                                        <button type="submit" class="buy">Reservar Ahora</button>
-                                    </form>
-                                <?php else: ?>
-                                    <button type="button" class="buy btn-requiere-registro" data-titulo="<?= htmlspecialchars($resultado['titulo'], ENT_QUOTES, 'UTF-8') ?>">
+                        <?php if ($esBibliotecario): ?>
+
+                            <span class="btn-admin-badge"
+                                  style="display:inline-block; max-width: 200px;">
+                                Modo Administrador
+                            </span>
+
+                        <?php elseif ((int)$libro['stock'] > 0): ?>
+
+                            <?php if ($estaLogueado): ?>
+
+                                <form method="POST"
+                                      action="Index.php?action=reservar"
+                                      style="display:inline-block;">
+
+                                    <input type="hidden" name="isbn"
+                                           value="<?= htmlspecialchars($libro['isbn'], ENT_QUOTES, 'UTF-8') ?>">
+
+                                    <input type="hidden" name="cantidad" value="1">
+
+                                    <button type="submit" class="buy">
                                         Reservar Ahora
                                     </button>
-                                <?php endif; ?>
+                                </form>
+
                             <?php else: ?>
-                                <button type="button" class="buy" style="background-color: #999; cursor: not-allowed;" disabled>
-                                    Sin Stock
+
+                                <button type="button"
+                                        class="buy btn-requiere-registro"
+                                        data-titulo="<?= htmlspecialchars($libro['titulo'], ENT_QUOTES, 'UTF-8') ?>">
+                                    Reservar Ahora
                                 </button>
+
                             <?php endif; ?>
-                        </div>
-                    </article>
-                <?php endif; ?>
-            </div>
+
+                        <?php else: ?>
+
+                            <button type="button" class="buy"
+                                    style="background-color: #999; cursor: not-allowed;"
+                                    disabled>
+                                Sin Stock
+                            </button>
+
+                        <?php endif; ?>
+
+                    </div>
+
+                </article>
+
+            <?php endforeach; ?>
+
+        </div>
+
+    <?php endif; ?>
+
+</div>
+
         </section>
 
         <section id="our-contacts">

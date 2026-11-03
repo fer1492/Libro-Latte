@@ -77,6 +77,18 @@ switch ($action) {
         $controllerLibro->crear();
         break;
 
+    case 'editar_libro':
+        $controllerLibro->editar();
+        break;
+
+    case 'actualizar_libro':
+        $controllerLibro->actualizar();
+        break;
+
+    case 'eliminar_libro':
+        $controllerLibro->eliminar();
+        break;
+
     // --- ACCIONES DE RESERVA Y VENTA ---
     case 'reservar':
         $controllerVenta->reservar();

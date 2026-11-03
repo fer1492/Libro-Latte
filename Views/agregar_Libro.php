@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 if (
     !isset($_SESSION['usuario_rol']) ||
-    !in_array(strtolower(trim((string) $_SESSION['usuario_rol'])), ['bibliotecario', 'admin', 'root'])
+    strtolower(trim((string) $_SESSION['usuario_rol'])) !== 'bibliotecario'
 ) {
     http_response_code(403);
     exit('No tenes permiso para acceder a esta seccion.');
@@ -55,15 +55,22 @@ if (isset($_GET['registro_libro']) && $_GET['registro_libro'] === 'ok') {
                 <label for="autor"> Autor *</label>
                 <input type="text" id="autor" name="autor" required>
 
-                <label for="categoria"> Categoría *</label>
-                <select id="categoria" name="categoria" required>
-                    <option value="ficcion">Ficción</option>
-                    <option value="no-ficcion">No Ficción</option>
-                    <option value="infantil-y-juvenil">Infantil y Juvenil</option>
-                    <option value="textos">Textos</option>
-                    <option value="manga">Manga</option>
-                    <option value="comic">Comic</option>
-                </select>
+                <label for="categoria">Categoría *</label>
+
+                <input
+                    type="text"
+                    id="categoria"
+                    name="categoria"
+                    list="lista-categorias"
+                    placeholder="Elegí o escribí una categoría"
+                    required
+                >
+
+                <datalist id="lista-categorias">
+                    <?php foreach ($categorias as $categoriaExistente): ?>
+                        <option value="<?= htmlspecialchars($categoriaExistente, ENT_QUOTES, 'UTF-8') ?>">
+                    <?php endforeach; ?>
+                </datalist>
 
                 <label for="descripcion"> Descripción </label>
                 <textarea id="descripcion" name="descripcion" placeholder="Breve reseña o sinopsis del libro..."></textarea>

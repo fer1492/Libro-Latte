@@ -161,3 +161,11 @@ ADD COLUMN categoria VARCHAR(50) NOT NULL DEFAULT 'ficcion';
 ALTER TABLE ventas 
 ADD COLUMN estado VARCHAR(50) DEFAULT 'Pendiente';
 
+ALTER TABLE ventas
+ADD COLUMN atendido_por VARCHAR (20) NOT NULL;
+
+alter table ventas
+modify column atendido_por varchar(20) null default null;
+
+ALTER TABLE libros
+ADD COLUMN activo TINYINT(1) NOT NULL DEFAULT 1;
