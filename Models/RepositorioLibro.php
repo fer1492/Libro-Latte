@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/Libro.php';
 
 class RepositorioLibro {
@@ -30,7 +29,7 @@ class RepositorioLibro {
         ]);
     }
 
-    // Obtener todos los libros
+    // Obtener todos los libros activos
     public function buscarlibro() {
         $sql = "SELECT isbn, titulo, autor, precio, stock, descripcion, imagen, categoria
                  FROM libros
@@ -39,28 +38,14 @@ class RepositorioLibro {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Buscar título, stock y demás datos por ISBN
+    // Buscar datos por ISBN de forma exacta y segura
     public function buscarStockPorIsbn($isbn) {
         $sql = "SELECT isbn, titulo, autor, precio, stock, descripcion, imagen, categoria
                 FROM libros
-                WHERE isbn = :isbn AND activo = 1
-                AND (
-                    isbn LIKE :isbn
-                    OR titulo LIKE :titulo
-                    OR autor LIKE :autor
-                )
-                ORDER BY titulo ASC";
+                WHERE isbn = :isbn AND activo = 1";
 
         $stmt = $this->conexion->prepare($sql);
-
-        $titulo = '%' . $busqueda . '%';
-
-        
-        $stmt->execute([
-            ':isbn' => $texto,
-            ':titulo' => $texto,
-            ':autor' => $texto
-        ]);
+        $stmt->execute([':isbn' => $isbn]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -90,7 +75,7 @@ class RepositorioLibro {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //Busca un libro por isbn para editar
+    // Busca un libro por isbn para editar
     public function obtenerLibroPorIsbn($isbn) {
         $sql = "SELECT *
                 FROM libros
@@ -102,7 +87,7 @@ class RepositorioLibro {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    //Actualiza datos de un libro
+    // Actualiza datos de un libro
     public function actualizarLibro ($isbn, $datos) {
         $sql = "UPDATE libros
                 SET titulo = :titulo,
@@ -128,7 +113,7 @@ class RepositorioLibro {
         ]);
     }
 
-    //Comprueba si un libro tiene reservas pendientes
+    // Comprueba si un libro tiene reservas pendientes
     public function tieneReservasPendientes($isbn) {
         $sql = "SELECT COUNT(*)
                 FROM ventas
@@ -141,9 +126,8 @@ class RepositorioLibro {
         return (int) $stmt->fetchColumn() > 0;
     }
 
-    //Eliminacion del libro
+    // Eliminacion lógica del libro
     public function EliminarLibro($isbn) {
-        //No permitira eliminar el libro con reserva pendiente
         if ($this->tieneReservasPendientes($isbn)) {
             return false;
         }
@@ -158,34 +142,32 @@ class RepositorioLibro {
         return $stmt->rowCount() > 0;
     }
 
-    // Buscar libros por ISBN, título o autor
+    // Buscar libros por ISBN, título o autor (Búsqueda general flexible)
     public function buscarPorTexto($busqueda) {
+        $sql = "SELECT isbn, titulo, autor, precio, stock,
+                       descripcion, imagen, categoria
+                FROM libros
+                WHERE activo = 1
+                AND (
+                    isbn LIKE :isbn
+                    OR titulo LIKE :titulo
+                    OR autor LIKE :autor
+                )
+                ORDER BY titulo ASC";
 
-    $sql = "SELECT isbn, titulo, autor, precio, stock,
-                   descripcion, imagen, categoria
-            FROM libros
-            WHERE activo = 1
-            AND (
-                isbn LIKE :isbn
-                OR titulo LIKE :titulo
-                OR autor LIKE :autor
-            )
-            ORDER BY titulo ASC";
+        $stmt = $this->conexion->prepare($sql);
+        $texto = '%' . $busqueda . '%';
 
-    $stmt = $this->conexion->prepare($sql);
+        $stmt->execute([
+            ':isbn'   => $texto,
+            ':titulo' => $texto,
+            ':autor'  => $texto
+        ]);
 
-    $texto = '%' . $busqueda . '%';
-
-    $stmt->execute([
-        ':isbn' => $texto,
-        ':titulo' => $texto,
-        ':autor' => $texto
-    ]);
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    //arroja todoas las cateogiras disponibles
+    // Arroja todas las categorías disponibles con stock
     public function obtenerCategorias() {
         $sql = "SELECT categoria, COUNT(*) AS cantidad
                 FROM libros
@@ -202,48 +184,45 @@ class RepositorioLibro {
     }
 
     // Buscar libros disponibles según las categorías seleccionadas
-public function buscarDisponiblesPorCategorias($categorias) {
+    public function buscarDisponiblesPorCategorias($categorias) {
+        $marcadores = [];
 
-    $marcadores = [];
+        foreach ($categorias as $i => $categoria) {
+            $marcadores[] = ':categoria' . $i;
+        }
 
-    foreach ($categorias as $i => $categoria) {
-        $marcadores[] = ':categoria' . $i;
-    }
+        $sql = "SELECT isbn, titulo, autor, precio, stock,
+                       descripcion, imagen, categoria
+                FROM libros
+                WHERE activo = 1
+                AND stock > 0
+                AND categoria IN (" . implode(',', $marcadores) . ")
+                ORDER BY titulo ASC";
 
-    $sql = "SELECT isbn, titulo, autor, precio, stock,
-                   descripcion, imagen, categoria
-            FROM libros
-            WHERE activo = 1
-            AND stock > 0
-            AND categoria IN (" . implode(',', $marcadores) . ")
-            ORDER BY titulo ASC";
+        $stmt = $this->conexion->prepare($sql);
+        $parametros = [];
 
-    $stmt = $this->conexion->prepare($sql);
+        foreach ($categorias as $i => $categoria) {
+            $parametros[':categoria' . $i] = $categoria;
+        }
 
-    $parametros = [];
+        $stmt->execute($parametros);
 
-    foreach ($categorias as $i => $categoria) {
-        $parametros[':categoria' . $i] = $categoria;
-    }
-
-    $stmt->execute($parametros);
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener todas las categorías existentes para los formularios
-public function obtenerNombresCategorias() {
+    public function obtenerNombresCategorias() {
+        $sql = "SELECT DISTINCT categoria
+                FROM libros
+                WHERE activo = 1
+                AND categoria IS NOT NULL
+                AND categoria <> ''
+                ORDER BY categoria ASC";
 
-    $sql = "SELECT DISTINCT categoria
-            FROM libros
-            WHERE activo = 1
-            AND categoria IS NOT NULL
-            AND categoria <> ''
-            ORDER BY categoria ASC";
+        $stmt = $this->conexion->query($sql);
 
-    $stmt = $this->conexion->query($sql);
-
-    return $stmt->fetchAll(\PDO::FETCH_COLUMN);
-}
+        return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }
 ?>
