@@ -30,7 +30,9 @@ if (isset($_GET['registro_libro']) && $_GET['registro_libro'] === 'ok') {
 <body>
     <header>
         <div id="logo">
-            <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            <a href="../Public/Index.php">
+                <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            </a>
         </div>
         <h1>Libro&Latte - Administración</h1>
     </header>

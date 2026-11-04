@@ -45,7 +45,9 @@ $valor = function ($campo) use ($libro) {
 
 <header>
     <div id="logo">
-            <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            <a href="../Public/Index.php">
+                <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            </a>
     </div>
 
     <h1>Libro&Latte - Gestion de Catalogo</h1>

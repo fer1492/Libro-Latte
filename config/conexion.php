@@ -5,7 +5,7 @@ $host = "localhost";
 $puerto = 3306;
 $dbname = "libreria";
 $user = "root";
-$pass = "5095627xd";
+$pass = "";
 
 try {
     $conexion = new PDO(

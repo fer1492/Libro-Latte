@@ -69,7 +69,9 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header>
         <div id="logo">
-            <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            <a href="/Public/Index.php">
+                <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            </a>
         </div>
         <h1>Biblioteca Libro&Latte</h1>
     </header>
