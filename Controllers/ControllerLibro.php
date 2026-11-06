@@ -322,6 +322,46 @@ public function mostrarFormulario() {
 
 
     }
+public function guardarResena() {
+        $this->iniciarSesion();
 
-    
+        if (!isset($_SESSION['usuario_nombre'])) {
+            header('Location: Index.php?action=login&error=debe_iniciar_sesion');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: Index.php?action=catalogo');
+            exit;
+        }
+
+        $isbn = trim($_POST['isbn'] ?? '');
+        $calificacion = $_POST['calificacion'] ?? '';
+        $comentario = trim($_POST['comentario'] ?? '');
+        $usuario = $_SESSION['usuario_nombre'];
+
+        try {
+            if ($isbn === '' || $calificacion === '' || $comentario === '') {
+                throw new Exception('Todos los campos de la reseña son obligatorios.');
+            }
+
+            if (!is_numeric($calificacion) || (int)$calificacion < 1 || (int)$calificacion > 5) {
+                throw new Exception('La calificación debe ser un número entre 1 y 5.');
+            }
+
+            $this->repo->guardarResena($isbn, $usuario, (int)$calificacion, $comentario);
+
+            header('Location: Index.php?action=catalogo&resena=ok');
+            exit;
+
+        } catch (Exception $e) {
+            header('Location: Index.php?action=catalogo&error=' . urlencode($e->getMessage()));
+            exit;
+        }
+    }
+
+    public function obtenerResenas($isbn) {
+        return $this->repo->obtenerResenasPorIsbn($isbn);
+    }
 }
+    

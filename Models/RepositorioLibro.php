@@ -224,5 +224,22 @@ class RepositorioLibro {
 
         return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
+    public function guardarResena($isbn, $usuario, $calificacion, $comentario) {
+        $sql = "INSERT INTO resenas (isbn, usuario, calificacion, comentario) VALUES (:isbn, :usuario, :calificacion, :comentario)";
+        $stmt = $this->conexion->prepare($sql);
+        return $stmt->execute([
+            ':isbn' => $isbn,
+            ':usuario' => $usuario,
+            ':calificacion' => $calificacion,
+            ':comentario' => $comentario
+        ]);
+    }
+
+    public function obtenerResenasPorIsbn($isbn) {
+        $sql = "SELECT usuario, calificacion, comentario, fecha FROM resenas WHERE isbn = :isbn ORDER BY fecha DESC";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute([':isbn' => $isbn]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

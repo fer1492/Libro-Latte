@@ -26,6 +26,37 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
+        /* =====================================
+/* =====================================
+   ESTRELLAS INTERACTIVAS DE RESEÑA
+===================================== */
+.estrellas-rating {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    margin: 5px auto;
+    unicode-bidi: bidi-override;
+    direction: rtl; /* Invierte el orden lógico para que el hover pinte hacia la izquierda correctamente */
+}
+
+.estrellas-rating input {
+    display: none;
+}
+
+.estrellas-rating label {
+    font-size: 1.5rem;
+    color: #d8c4ae; /* Color estrella vacía */
+    transition: color 0.2s ease;
+    direction: ltr; /* Mantiene la estrella orientada normalmente */
+}
+
+/* Pintar al pasar el mouse o al estar seleccionada de izquierda a derecha */
+.estrellas-rating input:checked ~ label,
+.estrellas-rating label:hover,
+.estrellas-rating label:hover ~ label {
+    color: #f5b301; /* Color estrella dorada */
+}
 
         /* =====================================
            NAVEGACIÓN DEL CATÁLOGO
@@ -670,8 +701,76 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                                     </p>
 
                                 <?php endif; ?>
+                                <?php if (!empty($libro['descripcion'])): ?>
 
+            <p class="descripcion">
+                <?= htmlspecialchars($libro['descripcion'], ENT_QUOTES, 'UTF-8') ?>
+            </p>
 
+        <?php endif; ?>
+
+        <!-- =====================================
+             SECCIÓN DE RESEÑAS DEL LIBRO
+        ===================================== -->
+        <div class="seccion-resenas" style="margin-top: 15px; border-top: 1px solid #d8c4ae; padding-top: 10px;">
+            <h4 style="font-family: 'Cinzel', serif; color: #70452F; font-size: 1rem; margin-bottom: 8px;">Reseñas de lectores</h4>
+
+            <div class="lista-resenas" style="max-height: 150px; overflow-y: auto; margin-bottom: 10px; font-size: 0.9rem;">
+                <?php 
+                    // Llamamos a la función del controlador para obtener las reseñas de este ISBN
+                    $resenasLibro = $this->obtenerResenas($libro['isbn']);
+                ?>
+
+                <?php if (empty($resenasLibro)): ?>
+                    <p style="color: #777; font-style: italic; font-size: 0.85rem;">Sé el primero en dejar una reseña.</p>
+                <?php else: ?>
+                    <?php foreach ($resenasLibro as $resena): ?>
+                        <div style="background: #fffaf3; border: 1px solid #ebdcd0; padding: 6px 8px; border-radius: 4px; margin-bottom: 6px;">
+                            <strong><?= htmlspecialchars($resena['usuario'], ENT_QUOTES, 'UTF-8') ?></strong> 
+                            <span style="color: #b58100;">(<?= (int)$resena['calificacion'] ?> ⭐)</span>
+                            <p style="margin: 3px 0 0 0; color: #444;"><?= htmlspecialchars($resena['comentario'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <small style="color: #888; font-size: 0.75rem;"><?= $resena['fecha'] ?? '' ?></small>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+
+            <!-- Formulario para dejar reseña (Solo si está logueado y no es bibliotecario) -->
+<!-- Formulario para dejar reseña (Solo si está logueado y no es bibliotecario) -->
+            <?php if ($estaLogueado && !$esBibliotecario): ?>
+                <form action="Index.php?action=guardar_resena" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
+                    
+                    <!-- Input oculto indispensable para saber el ISBN del libro -->
+                    <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn'], ENT_QUOTES, 'UTF-8') ?>">
+
+                    <div style="font-size: 0.85rem; color: #70452F; font-weight: bold;">Tu calificación:</div>
+                    <div class="estrellas-rating">
+                        <input type="radio" id="star5-<?= $libro['isbn'] ?>" name="calificacion" value="5" required />
+                        <label for="star5-<?= $libro['isbn'] ?>" title="5 estrellas">★</label>
+                        
+                        <input type="radio" id="star4-<?= $libro['isbn'] ?>" name="calificacion" value="4" />
+                        <label for="star4-<?= $libro['isbn'] ?>" title="4 estrellas">★</label>
+                        
+                        <input type="radio" id="star3-<?= $libro['isbn'] ?>" name="calificacion" value="3" />
+                        <label for="star3-<?= $libro['isbn'] ?>" title="3 estrellas">★</label>
+                        
+                        <input type="radio" id="star2-<?= $libro['isbn'] ?>" name="calificacion" value="2" />
+                        <label for="star2-<?= $libro['isbn'] ?>" title="2 estrellas">★</label>
+                        
+                        <input type="radio" id="star1-<?= $libro['isbn'] ?>" name="calificacion" value="1" />
+                        <label for="star1-<?= $libro['isbn'] ?>" title="1 estrellas">★</label>
+                    </div>
+
+                    <textarea name="comentario" placeholder="Escribe tu opinión..." required rows="2" style="padding: 5px; border-radius: 4px; border: 1px solid #d8c4ae; font-size: 0.85rem; resize: none;"></textarea>
+
+                    <button type="submit" style="background-color: #70452F; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer; font-family: 'Cinzel', serif; font-size: 0.8rem;">
+                        Publicar Reseña
+                    </button>
+                </form>
+            <?php endif; ?>
+            </div>
+
+                   
                                 <!-- ACCIONES PARA BIBLIOTECARIOS -->
 
                                 <?php if ($esBibliotecario): ?>

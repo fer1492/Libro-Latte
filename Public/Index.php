@@ -56,6 +56,7 @@ switch ($action) {
         break;
 
     // --- ACCIONES DE LIBRO ---
+    
     case 'buscar_isbn':
         $controllerLibro->buscarPorIsbn();
         break;
@@ -68,6 +69,11 @@ switch ($action) {
         $controllerLibro->listar();
         break;
 
+    // --- ACCIONES DE RESEÑAS ---
+    
+    case 'guardar_resena':
+        $controllerLibro->guardarResena();
+        break;
     // --- ACCIONES AGREGAR LIBRO (SOLO BIBLIOTECARIO) ---
     case 'formulario_libro':
         $controllerLibro->mostrarFormulario();
