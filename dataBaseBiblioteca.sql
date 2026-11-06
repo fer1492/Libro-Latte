@@ -169,3 +169,13 @@ modify column atendido_por varchar(20) null default null;
 
 ALTER TABLE libros
 ADD COLUMN activo TINYINT(1) NOT NULL DEFAULT 1;
+
+CREATE TABLE resenas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(20) NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    calificacion INT NOT NULL,
+    comentario TEXT NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (isbn) REFERENCES libros(isbn) ON DELETE CASCADE
+);
