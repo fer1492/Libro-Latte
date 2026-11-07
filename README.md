@@ -25,14 +25,14 @@ gantt
 
 ```mermaid
 flowchart TD
-    A[Análisis y diseño] --> B[Base de datos y backend]
-    B --> C[UI y FrontEnd]
-    C --> D[Integración y entrega]
-    D --> E[Funcionalidades Core]
+    A["Análisis y diseño<br>(9 días)"] --> B["Base de datos y backend<br>(20 días)"]
+    B --> C["UI y FrontEnd<br>(20 días)"]
+    C --> D["Integración y entrega<br>(9 días)"]
+    D --> E["Funcionalidades Core<br>(13 días)"]
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px,color:#000
-    style B fill:#bbf,stroke:#333,stroke-width:2px,color:#000
-    style C fill:#bfb,stroke:#333,stroke-width:2px,color:#000
-    style D fill:#ff9,stroke:#333,stroke-width:2px,color:#000
-    style E fill:#fbb,stroke:#333,stroke-width:2px,color:#000
+    style A fill:#ff99cc,stroke:#333,stroke-width:2px,color:#000
+    style B fill:#9999ff,stroke:#333,stroke-width:2px,color:#000
+    style C fill:#99ff99,stroke:#333,stroke-width:2px,color:#000
+    style D fill:#ffff99,stroke:#333,stroke-width:2px,color:#000
+    style E fill:#ff9999,stroke:#333,stroke-width:2px,color:#000
 ```
