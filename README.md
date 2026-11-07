@@ -1,23 +1,14 @@
-# 📚 Libro-Latte
-Sistema web de gestión de librería desarrollado con PHP, MVC y PDO.
+## Cronograma del Proyecto (Gantt)
 
-## Cronograma del Proyecto
 ```mermaid
 gantt
-    title Cronograma por Fases - Libro&Latte (Completado)
+    title Cronograma - Libro-Latte
     dateFormat  YYYY-MM-DD
-    
-    section 1. Análisis
-    Requisitos y MER             :done, des, 2026-03-01, 15d
-    
-    section 2. Backend
-    Estructura PDO y Repositorios :done, db, after des, 25d
-    
-    section 3. Frontend
-    Header Grid y Vistas         :done, ui, after db, 20d
-    
-    section 4. Core
-    Auth, Buscador y Reservas    :done, core, after ui, 25d
-    
-    section 5. Entrega
-    Git, Pruebas y Ajustes       :done, dep, after core, 15d
+    axisFormat  %b %Y
+
+    section Fases del Proyecto
+    Análisis y diseño          :a1, 2026-09-01, 15d
+    Base de datos y backend    :a2, after a1, 25d
+    UI y FrontEnd              :a3, after a2, 20d
+    Funcionalidades Core       :a4, after a3, 25d
+    Integración y entrega      :a5, after a4, 15d
