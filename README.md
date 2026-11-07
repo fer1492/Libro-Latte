@@ -19,15 +19,20 @@ gantt
     UI y FrontEnd              :a3, 2026-09-30, 2026-10-19
     Integración y entrega      :a5, 2026-10-20, 2026-10-28
     Funcionalidades Core       :a4, 2026-10-29, 2026-11-10
+```
 
+## Diagrama PERT - Red de Dependencias (Libro-Latte)
+
+```mermaid
 flowchart TD
-    A["Análisis y diseño<br>(01/09/2026 - 09/09/2026)"] --> B["Base de datos y backend<br>(10/09/2026 - 29/09/2026)"]
-    B --> C["UI y FrontEnd<br>(30/09/2026 - 19/10/2026)"]
-    C --> D["Integración y entrega<br>(20/10/2026 - 28/10/2026)"]
-    D --> E["Funcionalidades Core<br>(29/10/2026 - 10/11/2026)"]
+    A[Análisis y diseño] --> B[Base de datos y backend]
+    B --> C[UI y FrontEnd]
+    C --> D[Integración y entrega]
+    D --> E[Funcionalidades Core]
 
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style B fill:#bbf,stroke:#333,stroke-width:2px
     style C fill:#bfb,stroke:#333,stroke-width:2px
     style D fill:#ff9,stroke:#333,stroke-width:2px
     style E fill:#fbb,stroke:#333,stroke-width:2px
+```
