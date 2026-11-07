@@ -1,4 +1,4 @@
-## Cronograma del Proyecto (Libro-Latte)
+## Cronograma del Proyecto (Libro-Latte) Diagrama de Gantt
 
 ### Detalle de Fases y Fechas
 1. Análisis y diseño: 01/09/2026 – 09/09/2026
