@@ -1,14 +1,11 @@
 ## Cronograma del Proyecto (Libro-Latte)
 Detalle de Fases y Fechas
-1. Análisis y diseño: 01/09/2026 – 15/09/2026
+Análisis y diseño: 01/09/2026 – 9/09/2026
+Base de datos y backend: 10/09/2026 – 29/9/2026
+UI y FrontEnd: 30/9/2026 – 19/10/2026
+Funcionalidades Core: 29/10/2026 – 10/11/26
+Integración y entrega: 20/10/2026 – 28/10/2026
 
-2. Base de datos y backend: 16/09/2026 – 10/10/2026
-
-3. UI y FrontEnd: 11/10/2026 – 30/10/2026
-
-4. Funcionalidades Core: 31/10/2026 – 24/11/26
-
-5. Integración y entrega: 25/11/2026 – 09/12/2026
 
 ```mermaid
 gantt
