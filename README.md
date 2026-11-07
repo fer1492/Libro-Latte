@@ -8,7 +8,7 @@ gantt
     dateFormat  YYYY-MM-DD
     
     section 1. Análisis y Diseño
-    Diseño MER y Requisitos          :done, des, 2026-03-01, 14d
+    Requisitos y Modelo MER          :done, des, 2026-03-01, 14d
     
     section 2. Base de Datos y Backend
     Estructura PDO y Repositorios    :done, db, after des, 30d
