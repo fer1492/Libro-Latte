@@ -8,52 +8,67 @@ if (session_status() === PHP_SESSION_NONE) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Usuario - Libro-Latte</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario - Libro&Latte</title>
+    <link rel="stylesheet" href="../Style.css">
+    <link rel="stylesheet" href="../Media Querry.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5" style="max-width: 600px;">
-        <h2 class="mb-4">Editar Usuario</h2>
+    <header>
+        <div id="logo">
+            <a href="Index.php?action=inicio">
+                <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
+            </a>
+        </div>
+        <h1>Biblioteca Libro&Latte</h1>
+    </header>
+
+    <main class="panel-container" style="max-width: 600px;">
+        <h2 class="panel-title">Editar Usuario</h2>
+        <p class="panel-subtitle">Modifica los datos del usuario seleccionado en el sistema.</p>
         
-        <form action="<?php echo BASE_URL; ?>index.php?action=actualizar_usuario" method="POST" class="card p-4 shadow-sm">
+        <form action="<?php echo BASE_URL; ?>index.php?action=actualizar_usuario" method="POST" class="form-editar-usuario">
             
             <!-- Campo oculto para enviar la cédula que actúa como identificador -->
             <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>">
 
-            <div class="mb-3">
-                <label class="form-label">Cédula (No modificable):</label>
-                <input type="text" class="form-control" value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>" disabled>
+            <div class="form-group-custom">
+                <label class="form-label-custom">Cédula (No modificable):</label>
+                <input type="text" class="form-input-custom" value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>" disabled>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Nombre:</label>
-                <input type="text" name="nombre" class="form-control" value="<?php echo htmlspecialchars($usuario['nombre'] ?? ''); ?>" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom">Nombre:</label>
+                <input type="text" name="nombre" class="form-input-custom" value="<?php echo htmlspecialchars($usuario['nombre'] ?? ''); ?>" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Apellido:</label>
-                <input type="text" name="apellido" class="form-control" value="<?php echo htmlspecialchars($usuario['apellido'] ?? ''); ?>" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom">Apellido:</label>
+                <input type="text" name="apellido" class="form-input-custom" value="<?php echo htmlspecialchars($usuario['apellido'] ?? ''); ?>" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Correo Electrónico:</label>
-                <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($usuario['email'] ?? ''); ?>" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom">Correo Electrónico:</label>
+                <input type="email" name="email" class="form-input-custom" value="<?php echo htmlspecialchars($usuario['email'] ?? ''); ?>" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Rol del Usuario:</label>
-                <select name="rol" class="form-select" required>
+            <div class="form-group-custom">
+                <label class="form-label-custom">Rol del Usuario:</label>
+                <select name="rol" class="form-input-custom" required>
                     <option value="Socio" <?php echo (($usuario['rol'] ?? '') === 'Socio') ? 'selected' : ''; ?>>Socio</option>
                     <option value="Bibliotecario" <?php echo (($usuario['rol'] ?? '') === 'Bibliotecario') ? 'selected' : ''; ?>>Bibliotecario</option>
                     <option value="Admin" <?php echo (($usuario['rol'] ?? '') === 'Admin') ? 'selected' : ''; ?>>Admin</option>
                 </select>
             </div>
 
-            <div class="d-flex justify-content-between">
-                <a href="<?php echo BASE_URL; ?>index.php?action=listar_usuarios" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <div class="form-acciones-custom">
+                <a href="<?php echo BASE_URL; ?>index.php?action=listar_usuarios" class="btn-cancelar" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Cancelar</a>
+                <button type="submit" class="btn-confirmar">Guardar Cambios</button>
             </div>
         </form>
-    </div>
+    </main>
+
+    <footer>LIBRO&LATTE</footer>
 </body>
 </html>

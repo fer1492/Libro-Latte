@@ -84,10 +84,10 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                         <li><a class="header-links" href="Index.php?action=mis_reservas">Mis Reservas</a></li>
                     <?php endif; ?>
                     <?php if ($esBibliotecario): ?>
-                        <li><a class="header-links" href="Index.php?action=formulario_libro">Agregar Libro</a></li>
-                        <li><a class="header-links" href="Index.php?action=panel_reservas">Reservas</a></li>
-                        <li><a class="header-links" href="Index.php?action=listar_usuarios" style="color: #ffeb3b; font-weight: bold;">Usuarios</a></li>
-                    <?php endif; ?>
+    <li><a class="header-links" href="Index.php?action=formulario_libro">Agregar Libro</a></li>
+    <li><a class="header-links" href="Index.php?action=panel_reservas">Reservas</a></li>
+    <li><a class="header-links" href="Index.php?action=listar_usuarios">Usuarios</a></li>
+<?php endif; ?>
                 </ul>
             </nav>
         </div> 

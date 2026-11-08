@@ -10,66 +10,14 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Reservas - Libro&Latte</title>
-    <link rel="stylesheet" href="css/Style.css">
+    <link rel="stylesheet" href="../Style.css">
+    <link rel="stylesheet" href="../Media Querry.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        .reservas-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 25px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-family: 'Cormorant Garamond', serif;
-        }
-        .reservas-title {
-            font-family: 'Cinzel', serif;
-            color: #4a2e18;
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .tabla-mis-reservas {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1.15rem;
-        }
-        .tabla-mis-reservas th, .tabla-mis-reservas td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #e0d5c8;
-            text-align: left;
-        }
-        .tabla-mis-reservas th {
-            background-color: #6f4e37;
-            color: #fff;
-            font-family: 'Cinzel', serif;
-        }
-        .estado-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-        .estado-reserva { background: #fff3cd; color: #856404; }
-        .estado-vendido { background: #d4edda; color: #155724; }
-        .estado-cancelado { background: #f8d7da; color: #721c24; }
-        .btn-cancelar-sm {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-    </style>
 </head>
 <body>
     <header>
         <div id="logo">
-            <a href="/Public/Index.php">
+            <a href="Index.php?action=inicio">
                 <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
             </a>
         </div>
@@ -77,16 +25,16 @@ if (session_status() === PHP_SESSION_NONE) {
     </header>
 
     <main class="reservas-container">
-        <div style="margin-bottom: 20px;">
-            <a href="Index.php?action=inicio" style="color: #6f4e37; text-decoration: none; font-weight: 600;">&larr; Volver al Inicio</a>
+        <div class="reservas-nav">
+            <a href="Index.php?action=inicio">&larr; Volver al Inicio</a>
             &nbsp;|&nbsp;
-            <a href="Index.php?action=catalogo" style="color: #6f4e37; text-decoration: none; font-weight: 600;">Ver Catálogo</a>
+            <a href="Index.php?action=catalogo">Ver Catálogo</a>
         </div>
 
         <h2 class="reservas-title">Mis Reservas y Compras</h2>
 
         <?php if (empty($historial)): ?>
-            <p style="text-align: center; color: #777; padding: 30px; font-size: 1.2rem;">
+            <p class="reservas-vacio">
                 Aún no has realizado ninguna reserva. ¡Visita nuestro <a href="Index.php?action=catalogo">Catálogo</a> para elegir tus libros favoritos!
             </p>
         <?php else: ?>
