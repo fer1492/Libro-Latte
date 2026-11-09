@@ -16,8 +16,8 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <title>Bienvenidos a Libro&Latte</title>
     
     <!-- Rutas apuntando a las carpetas dentro de Public -->
-    <link rel="stylesheet" href="../Public/css/Style.css">
-    <link rel="stylesheet" href="../Public/css/Media-Querry.css">
+    <link rel="stylesheet" href="css/Style.css">
+    <link rel="stylesheet" href="css/Media-Querry.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e7c741f98a.js" crossorigin="anonymous"></script>
 </head>
@@ -26,8 +26,8 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 15px 30px; background-color: #70452F;">
         <!-- Logo a la izquierda -->
         <div id="logo" style="flex: 0 0 auto; display: flex; align-items: center;">
-            <a href="<?php echo BASE_URL; ?>index.php?action=inicio">
-                <img src="<?php echo BASE_URL; ?>Assets/Logo transparente.png" alt="Logo" style="max-height: 60px; width: auto;">
+            <a href="Index.php?action=inicio">
+                <img src="Assets/Logo transparente.png" alt="Logo" style="max-height: 60px; width: auto;">
             </a>
         </div>
 
@@ -94,6 +94,54 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     </header>
 
     <main>
+        <!-- Mensajes de Estado del Sistema -->
+        <?php if (isset($_GET['registro']) && $_GET['registro'] === 'ok'): ?>
+            <div class="banner-bienvenida" style="background: #d4edda; border-color: #28a745; color: #155724; padding: 12px 20px; margin: 15px 20px; border-radius: 6px;">
+                <span>🎉 <strong>¡Registro exitoso!</strong> Tu cuenta de socio ha sido creada y ya has iniciado sesión.</span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['login']) && $_GET['login'] === 'ok'): ?>
+            <div class="banner-bienvenida" style="background: #d4edda; border-color: #28a745; color: #155724; padding: 12px 20px; margin: 15px 20px; border-radius: 6px;">
+                <span>👋 <strong>¡Bienvenido!</strong> Has iniciado sesión correctamente.</span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error_registro'])): ?>
+            <?php 
+                $errMap = [
+                    'cedula_repetida' => 'La cédula ingresada ya está registrada en el sistema.',
+                    'email_repetido' => 'El correo electrónico ingresado ya está asociado a otra cuenta.',
+                    'password_corta' => 'La contraseña debe tener un mínimo de 8 caracteres.',
+                    'campos_vacios' => 'Por favor completa todos los campos para poder registrarte.',
+                    'email_invalido' => 'El formato del correo electrónico no es válido.',
+                    'fallo_bd' => 'Ocurrió un error al guardar tu registro en la base de datos.'
+                ];
+                $msg = $errMap[$_GET['error_registro']] ?? 'Ocurrió un error en el registro.';
+            ?>
+            <div class="banner-bienvenida" style="background: #f8d7da; border-color: #dc3545; color: #721c24; padding: 12px 20px; margin: 15px 20px; border-radius: 6px;">
+                <span>⚠️ <strong>Error en el registro:</strong> <?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error_login'])): ?>
+            <?php 
+                $errLoginMap = [
+                    'credenciales_incorrectas' => 'Correo electrónico o contraseña incorrectos. Verifica tus datos.',
+                    'campos_vacios' => 'Por favor ingresa tu correo y contraseña.'
+                ];
+                $msgLogin = $errLoginMap[$_GET['error_login']] ?? 'Error al iniciar sesión.';
+            ?>
+            <div class="banner-bienvenida" style="background: #f8d7da; border-color: #dc3545; color: #721c24; padding: 12px 20px; margin: 15px 20px; border-radius: 6px;">
+                <span>⚠️ <strong>Error de acceso:</strong> <?= htmlspecialchars($msgLogin, ENT_QUOTES, 'UTF-8') ?></span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['aviso']) && $_GET['aviso'] === 'registro_requerido'): ?>
+            <div class="banner-bienvenida" style="background: #fff3cd; border-color: #ffc107; color: #856404; padding: 12px 20px; margin: 15px 20px; border-radius: 6px;">
+                <span>ℹ️ <strong>Atención:</strong> Para reservar un libro necesitas iniciar sesión o registrarte como socio.</span>
+            </div>
+        <?php endif; ?>
         <?php if ($estaLogueado): ?>
             <div class="banner-bienvenida">
                 <span>

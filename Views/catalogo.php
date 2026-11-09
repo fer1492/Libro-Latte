@@ -438,7 +438,7 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <header>
 
         <div id="logo">
-            <a href="../Public/Index.php">
+            <a href="Index.php?action=inicio">
                 <img src="Assets/Logo transparente.png" alt="logo-libro&latte">
             </a>
         </div>
@@ -490,6 +490,60 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
     <main class="catalogo">
 
         <h2>Nuestro Catálogo de Libros</h2>
+
+        <!-- Mensajes del Sistema -->
+        <?php if (isset($_GET['registro']) && $_GET['registro'] === 'ok'): ?>
+            <div style="background: #d4edda; border-left: 5px solid #28a745; color: #155724; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                🎉 <strong>¡Registro exitoso!</strong> Tu cuenta de socio ha sido creada y tu sesión ya está iniciada.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['reserva']) && $_GET['reserva'] === 'ok'): ?>
+            <div style="background: #d4edda; border-left: 5px solid #28a745; color: #155724; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                📚 <strong>¡Reserva confirmada con éxito!</strong> Puedes consultar el estado en la sección <a href="Index.php?action=mis_reservas" style="color: #155724; font-weight: bold; text-decoration: underline;">Mis Reservas</a> y retirarlo en la biblioteca.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['login']) && $_GET['login'] === 'ok'): ?>
+            <div style="background: #d4edda; border-left: 5px solid #28a745; color: #155724; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                👋 <strong>¡Bienvenido!</strong> Sesión iniciada correctamente.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error_registro'])): ?>
+            <?php 
+                $errMap = [
+                    'cedula_repetida' => 'La cédula ingresada ya está registrada.',
+                    'email_repetido' => 'El correo electrónico ya está en uso.',
+                    'password_corta' => 'La contraseña debe tener al menos 8 caracteres.',
+                    'campos_vacios' => 'Completa todos los campos obligatorios.',
+                    'email_invalido' => 'El correo electrónico no es válido.',
+                    'fallo_bd' => 'No se pudo guardar el usuario en la base de datos.'
+                ];
+                $msg = $errMap[$_GET['error_registro']] ?? 'Ocurrió un error en el registro.';
+            ?>
+            <div style="background: #f8d7da; border-left: 5px solid #dc3545; color: #721c24; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                ⚠️ <strong>Error en el registro:</strong> <?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error_login'])): ?>
+            <div style="background: #f8d7da; border-left: 5px solid #dc3545; color: #721c24; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                ⚠️ <strong>Error al ingresar:</strong> Correo o contraseña incorrectos.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['aviso']) && $_GET['aviso'] === 'registro_requerido'): ?>
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; color: #856404; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                ℹ️ <strong>Para reservar:</strong> Debes registrarte como socio o iniciar sesión con tu cuenta.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error']) && $_GET['error'] === 'admin_no_puede_reservar'): ?>
+            <div style="background: #fff3cd; border-left: 5px solid #ffc107; color: #856404; padding: 12px 20px; margin-bottom: 20px; border-radius: 6px;">
+                ℹ️ <strong>Rol administrativo:</strong> Las cuentas de administrador o bibliotecario no pueden realizar reservas de clientes.
+            </div>
+        <?php endif; ?>
 
         <div class="catalogo-layout">
 

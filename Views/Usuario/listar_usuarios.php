@@ -10,8 +10,8 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios - Libro&Latte</title>
-    <link rel="stylesheet" href="../Style.css">
-    <link rel="stylesheet" href="../Media Querry.css">
+    <link rel="stylesheet" href="css/Style.css">
+    <link rel="stylesheet" href="css/Media-Querry.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -28,6 +28,8 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="nav-links">
             <a href="Index.php?action=inicio">&larr; Volver al Inicio</a>
             <a href="Index.php?action=catalogo">Ver Catálogo</a>
+            <a href="Index.php?action=panel_reservas">Panel Reservas</a>
+            <a href="Index.php?action=formulario_libro">Agregar Libro</a>
         </div>
 
         <h2 class="panel-title">Lista de Usuarios Registrados</h2>
@@ -48,21 +50,21 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php if (!empty($usuarios)): ?>
                     <?php foreach ($usuarios as $u): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($u['cedula'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><strong><?php echo htmlspecialchars($u['cedula'], ENT_QUOTES, 'UTF-8'); ?></strong></td>
                         <td><?php echo htmlspecialchars($u['nombre'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($u['apellido'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($u['email'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td>
                             <span class="badge-stock">
-                                <?php echo htmlspecialchars($u['rol'], ENT_QUOTES, 'UTF-8'); ?>
+                                <?php echo htmlspecialchars($u['rol'] ?: 'Socio', ENT_QUOTES, 'UTF-8'); ?>
                             </span>
                         </td>
                         <td>
-                            <div class="acciones-container">
-                                <a href="<?php echo BASE_URL; ?>index.php?action=editar_usuario&id=<?php echo $u['cedula']; ?>" class="btn-confirmar" style="text-decoration: none; padding: 6px 12px; font-size: 0.9rem;">Editar</a>
-                                <form method="POST" action="<?php echo BASE_URL; ?>index.php?action=eliminar_usuario" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?');" style="display:inline;">
-                                    <input type="hidden" name="cedula" value="<?php echo $u['cedula']; ?>">
-                                    <button type="submit" class="btn-cancelar" style="padding: 6px 12px; font-size: 0.9rem;">Eliminar</button>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <a href="Index.php?action=editar_usuario&id=<?php echo urlencode($u['cedula']); ?>" class="btn-editar-sm">Editar</a>
+                                <form method="POST" action="Index.php?action=eliminar_usuario" onsubmit="return confirm('¿Estás seguro de que deseas eliminar a <?php echo htmlspecialchars($u['nombre'], ENT_QUOTES, 'UTF-8'); ?>?');" style="display:inline; margin: 0;">
+                                    <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($u['cedula'], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <button type="submit" class="btn-eliminar-sm">Eliminar</button>
                                 </form>
                             </div>
                         </td>

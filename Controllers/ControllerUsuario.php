@@ -170,7 +170,7 @@ class ControllerUsuario {
 
     // Mostrar el formulario de edición para un usuario específico por su cédula
     public function editar() {
-        $cedula = $_GET['id'] ?? null;
+        $cedula = $_POST['cedula'] ?? $_GET['id'] ?? null;
         if ($cedula) {
             $usuario = $this->repo->buscarPorCedula($cedula);
             if ($usuario) {
@@ -201,7 +201,7 @@ class ControllerUsuario {
 
     // Eliminar un usuario del sistema por su cédula
     public function eliminar() {
-        $cedula = $_GET['id'] ?? null;
+        $cedula = $_POST['cedula'] ?? $_GET['id'] ?? null;
         if ($cedula) {
             $this->repo->eliminar($cedula);
         }

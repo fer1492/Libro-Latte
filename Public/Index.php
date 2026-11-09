@@ -1,29 +1,33 @@
 <?php
+// Public/Index.php - Enrutador Front Controller (MVC)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Public/index.php
 
-// Definir la URL base global para las vistas
-define('BASE_URL', 'http://localhost/LibreriaPaginaClon/Libro-Latte/Libro-Latte/Public/');
+// Definir la URL base global de forma dinamica y portable
+if (!defined('BASE_URL')) {
+    $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+    $basePath = rtrim($scriptDir, '/') . '/';
+    define('BASE_URL', $basePath);
+}
 
-// 1. Cargar la conexión a la base de datos
-require_once '../config/conexion.php';
+// 1. Cargar la conexion a la base de datos
+require_once __DIR__ . '/../config/conexion.php';
 
 // 2. Cargar los controladores
-require_once '../Controllers/ControllerUsuario.php';
-require_once '../Controllers/ControllerLibro.php';
-require_once '../Controllers/ControllerVenta.php';
+require_once __DIR__ . '/../Controllers/ControllerUsuario.php';
+require_once __DIR__ . '/../Controllers/ControllerLibro.php';
+require_once __DIR__ . '/../Controllers/ControllerVenta.php';
 
-// 3. Capturar la acción enviada por URL
+// 3. Capturar la accion enviada por URL (por defecto 'inicio')
 $action = $_GET['action'] ?? 'inicio';
 
-// 4. Instanciar los controladores pasando la conexión PDO
+// 4. Instanciar los controladores pasando la conexion PDO
 $controllerUsuario = new ControllerUsuario($conexion);
 $controllerLibro   = new ControllerLibro($conexion);
 $controllerVenta   = new ControllerVenta($conexion);
 
-// 5. Enrutador: Evaluar la acción requerida
+// 5. Enrutador: Evaluar la accion requerida
 switch ($action) {
 
     // --- ACCIONES DE USUARIO ---
@@ -56,7 +60,6 @@ switch ($action) {
         break;
 
     // --- ACCIONES DE LIBRO ---
-    
     case 'buscar_isbn':
         $controllerLibro->buscarPorIsbn();
         break;
@@ -69,12 +72,10 @@ switch ($action) {
         $controllerLibro->listar();
         break;
 
-    // --- ACCIONES DE RESEÑAS ---
-    
     case 'guardar_resena':
         $controllerLibro->guardarResena();
         break;
-    // --- ACCIONES AGREGAR LIBRO (SOLO BIBLIOTECARIO) ---
+
     case 'formulario_libro':
         $controllerLibro->mostrarFormulario();
         break;
