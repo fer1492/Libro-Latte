@@ -780,7 +780,13 @@ $estaLogueado = isset($_SESSION['usuario_cedula']);
                 <?php else: ?>
                     <?php foreach ($resenasLibro as $resena): ?>
                         <div style="background: #fffaf3; border: 1px solid #ebdcd0; padding: 6px 8px; border-radius: 4px; margin-bottom: 6px;">
-                            <strong><?= htmlspecialchars($resena['usuario'], ENT_QUOTES, 'UTF-8') ?></strong> 
+                            <strong>
+                                    <?= htmlspecialchars(
+                                        trim($resena['nombre'] . ' ' . $resena['apellido']),
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    ) ?>
+                                </strong>
                             <span style="color: #b58100;">(<?= (int)$resena['calificacion'] ?> ⭐)</span>
                             <p style="margin: 3px 0 0 0; color: #444;"><?= htmlspecialchars($resena['comentario'], ENT_QUOTES, 'UTF-8') ?></p>
                             <small style="color: #888; font-size: 0.75rem;"><?= $resena['fecha'] ?? '' ?></small>

@@ -325,7 +325,7 @@ public function mostrarFormulario() {
 public function guardarResena() {
         $this->iniciarSesion();
 
-        if (!isset($_SESSION['usuario_nombre'])) {
+        if (!isset($_SESSION['usuario_cedula'])) {
             header('Location: Index.php?action=login&error=debe_iniciar_sesion');
             exit;
         }
@@ -338,7 +338,7 @@ public function guardarResena() {
         $isbn = trim($_POST['isbn'] ?? '');
         $calificacion = $_POST['calificacion'] ?? '';
         $comentario = trim($_POST['comentario'] ?? '');
-        $usuario = $_SESSION['usuario_nombre'];
+        $usuario_cedula = $_SESSION['usuario_cedula'];
 
         try {
             if ($isbn === '' || $calificacion === '' || $comentario === '') {
@@ -349,7 +349,8 @@ public function guardarResena() {
                 throw new Exception('La calificación debe ser un número entre 1 y 5.');
             }
 
-            $this->repo->guardarResena($isbn, $usuario, (int)$calificacion, $comentario);
+            $this->repo->guardarResena(
+                $isbn, $usuario_cedula, (int)$calificacion, $comentario);
 
             header('Location: Index.php?action=catalogo&resena=ok');
             exit;

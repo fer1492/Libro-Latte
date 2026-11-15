@@ -179,3 +179,19 @@ CREATE TABLE resenas (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (isbn) REFERENCES libros(isbn) ON DELETE CASCADE
 );
+
+drop table promociones;
+
+ALTER TABLE ventas
+    -> ADD CONSTRAINT fk_venta_bibliotecario
+    -> FOREIGN KEY (atendido_por)
+    -> REFERENCES usuarios(cedula);
+
+ALTER TABLE resenas
+CHANGE COLUMN usuario usuario_cedula VARCHAR(20) NOT NULL;
+
+ALTER TABLE resenas
+ADD CONSTRAINT fk_resenas_usuario
+FOREIGN KEY (usuario_cedula)
+REFERENCES usuarios(cedula);
+

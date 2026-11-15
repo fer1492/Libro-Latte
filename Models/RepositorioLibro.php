@@ -224,22 +224,40 @@ class RepositorioLibro {
 
         return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
-    public function guardarResena($isbn, $usuario, $calificacion, $comentario) {
-        $sql = "INSERT INTO resenas (isbn, usuario, calificacion, comentario) VALUES (:isbn, :usuario, :calificacion, :comentario)";
-        $stmt = $this->conexion->prepare($sql);
-        return $stmt->execute([
-            ':isbn' => $isbn,
-            ':usuario' => $usuario,
-            ':calificacion' => $calificacion,
-            ':comentario' => $comentario
-        ]);
-    }
+    public function guardarResena($isbn, $usuario_cedula, $calificacion, $comentario) {
+    $sql = "INSERT INTO resenas
+            (isbn, usuario_cedula, calificacion, comentario)
+            VALUES
+            (:isbn, :usuario_cedula, :calificacion, :comentario)";
+
+    $stmt = $this->conexion->prepare($sql);
+
+    return $stmt->execute([
+        ':isbn' => $isbn,
+        ':usuario_cedula' => $usuario_cedula,
+        ':calificacion' => $calificacion,
+        ':comentario' => $comentario
+    ]);
+}
 
     public function obtenerResenasPorIsbn($isbn) {
-        $sql = "SELECT usuario, calificacion, comentario, fecha FROM resenas WHERE isbn = :isbn ORDER BY fecha DESC";
-        $stmt = $this->conexion->prepare($sql);
-        $stmt->execute([':isbn' => $isbn]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $sql = "SELECT
+                r.usuario_cedula,
+                u.nombre,
+                u.apellido,
+                r.calificacion,
+                r.comentario,
+                r.fecha
+            FROM resenas r
+            INNER JOIN usuarios u
+                ON r.usuario_cedula = u.cedula
+            WHERE r.isbn = :isbn
+            ORDER BY r.fecha DESC";
+
+    $stmt = $this->conexion->prepare($sql);
+    $stmt->execute([':isbn' => $isbn]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
 ?>

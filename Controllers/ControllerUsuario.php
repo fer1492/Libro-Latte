@@ -72,7 +72,7 @@ class ControllerUsuario {
                     session_start();
                 }
 
-                $_SESSION['usuario_cedula']   = $cedula;
+                $_SESSION['usuario_cedula']   = $usuario['cedula'];
                 $_SESSION['usuario_nombre']   = $nombre;
                 $_SESSION['usuario_apellido'] = $apellido;
                 $_SESSION['usuario_rol']      = 'Socio';
